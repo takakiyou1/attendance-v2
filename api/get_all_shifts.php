@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db.php'; // api配下に配置している前提
+require __DIR__ . '/../config/database.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -10,40 +10,38 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 
+// シフトを取得（repeat_idも取得する）
 $stmt = $pdo->query("
-  SELECT s.id, s.user_id, s.date, s.shift_start, s.shift_end, u.name 
+  SELECT 
+    s.id, 
+    s.user_id, 
+    s.date, 
+    s.shift_start, 
+    s.shift_end, 
+    s.repeat_id,          -- ✅ 繰り返し識別子を追加
+    u.name 
   FROM shifts s
   JOIN users u ON s.user_id = u.id
+  ORDER BY s.date ASC
 ");
 
-$shifts = $stmt->fetchAll();
 $events = [];
-
-foreach ($shifts as $s) {
-    $date = $s['date'];
-    $startTime = $s['shift_start'];
-    $endTime = $s['shift_end'];
-
-    $startDateTime = new DateTime("$date $startTime");
-    $endDateTime   = new DateTime("$date $endTime");
-
-    // 翌日5:00まで対応：終了が開始より前（深夜またぎ）は翌日扱いに
-    if ($endDateTime <= $startDateTime) {
-        $endDateTime->modify('+1 day');
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $s) {
+    $start = new DateTime("{$s['date']} {$s['shift_start']}");
+    $end   = new DateTime("{$s['date']} {$s['shift_end']}");
+    if ($end <= $start) {
+        $end->modify('+1 day');
     }
 
-    // タイトルに時間帯を表示（例：田中太郎（20:00〜翌5:00））
-    $startLabel = $startDateTime->format('H:i');
-    $endLabel = $endDateTime->format('H:i');
-    $title = "{$s['name']}（{$startLabel}〜{$endLabel}）";
+    // ✅ 繰り返しシフトはタイトルに「※繰り返し」を付ける
+    $repeatMark = !empty($s['repeat_id']) ? '※繰り返し ' : '';
 
     $events[] = [
-        'id'      => $s['id'],
-        'title'   => $title,
-        'start'   => $startDateTime->format('Y-m-d\TH:i:s'),
-        'end'     => $endDateTime->format('Y-m-d\TH:i:s'),
-        'allDay'  => false,
-        'display' => 'auto' // ✅ 月表示でバーを伸ばさず、時間ありのまま表示
+        'id'     => $s['id'],
+        'title'  => $repeatMark . "{$s['name']}（" . substr($s['shift_start'], 0, 5) . "〜" . substr($s['shift_end'], 0, 5) . "）",
+        'start'  => $start->format('Y-m-d\TH:i:s'),
+        'end'    => $end->format('Y-m-d\TH:i:s'),
+        'allDay' => false,
     ];
 }
 
