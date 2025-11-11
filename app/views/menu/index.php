@@ -29,6 +29,7 @@
       <li><a href="/attendance-v2/public/index.php/user/list">👥 ユーザー管理</a></li>
       <li><a href="/attendance-v2/public/index.php/shift/calendar">📅 シフト管理</a></li>
       <li><a href="/attendance-v2/public/index.php/pay/summary">💰 報酬一覧</a></li>
+       <li><a href="/attendance-v2/public/index.php/pay/settings">🧾 報酬設定一覧</a></li>
       <li><a href="/attendance-v2/public/index.php/news/board">📰 社内ニュース</a></li>
     <?php else: ?>
       <li><a href="/attendance-v2/public/index.php/my_shift">📅 自分のシフト</a></li>

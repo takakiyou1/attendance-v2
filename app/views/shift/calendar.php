@@ -132,6 +132,7 @@
         <!-- ボタン群 -->
         <div style="text-align:center;">
           <button type="submit" class="save">💾 保存</button>
+          <button type="button" id="deleteSingleBtn" style="background:#ff6666;color:#fff;">🗑 このシフトを削除</button>
           <button type="button" id="repeatBtn" class="repeat">🔁 繰り返し設定</button>
           <button type="button" id="editGroupBtn" style="background:#ffc107;color:#000;">✏️ 繰り返し全体を変更</button>
           <button type="button" id="deleteGroupBtn" style="background:#dc3545;color:#fff;">🗑 繰り返し全体を削除</button>
@@ -258,6 +259,55 @@
           calendar.refetchEvents();
         });
       });
+
+      // ✅ 繰り返し全体を変更
+document.getElementById('editGroupBtn').addEventListener('click', () => {
+  const shiftIdField = document.getElementById('shift-id');
+  const repeat_id = shiftIdField.dataset.repeatId;
+  if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
+  if (!confirm('この繰り返し全体を変更しますか？')) return;
+
+  fetch('/attendance-v2/api/update_shift_group.php', {
+    method: 'POST',
+    body: new URLSearchParams({
+      repeat_id,
+      user_id: document.getElementById('user_id').value,
+      shift_start: document.getElementById('shift_start').value,
+      shift_end: document.getElementById('shift_end').value
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    alert(res.message);
+    closeModal();
+    calendar.refetchEvents();
+  })
+  .catch(err => console.error(err));
+});
+
+// ✅ 単発シフト削除
+document.getElementById('deleteSingleBtn').addEventListener('click', () => {
+  const id = document.getElementById('shift-id').value;
+  if (!id) return alert('削除対象がありません');
+  if (!confirm('このシフトを削除しますか？')) return;
+
+  fetch('/attendance-v2/public/index.php/shift/delete', {
+    method: 'POST',
+    body: new URLSearchParams({ id })
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === 'deleted') {
+      alert('シフトを削除しました');
+      closeModal();
+      calendar.refetchEvents();
+    } else {
+      alert('削除に失敗しました');
+    }
+  });
+});
+
+
 
       // 閉じる
       closeBtn.addEventListener('click', closeModal);

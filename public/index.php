@@ -32,6 +32,19 @@ $router->post('/shift/save_repeat', 'ShiftController@save_repeat');
 // 報酬一覧
 $router->get('/pay/summary', 'PayController@summary');
 
+// 報酬管理
+$router->get('/pay/summary', 'PayController@summary');
+$router->get('/pay/edit', 'PayController@edit');
+
+// 報酬設定
+$router->get('/pay/settings', 'PayController@settings');
+$router->get('/pay/setting_edit', 'PayController@setting_edit');
+$router->get('/pay/history', 'PayController@history');
+$router->get('/pay/allowance_list', 'PayController@allowance_list');
+
+
+
+
 // ユーザー管理
 $router->get('/user/list', 'UserController@list');
 $router->get('/user/create', 'UserController@create');
