@@ -1,36 +1,54 @@
 <?php
+session_name('attendance_session');
+session_set_cookie_params([
+    'path' => '/attendance-v2',
+    'domain' => 'localhost',
+    'secure' => false,
+    'httponly' => true,
+    'samesite' => 'None'
+]);
 session_start();
-require '../db.php'; // ← パスに注意（api/配下）
 
+require __DIR__ . '/../config/database.php';
 header('Content-Type: application/json; charset=utf-8');
 
-// ログインチェック
+// ✅ formatHour関数を追加
+function formatHour($time) {
+    [$h, $m] = explode(':', $time);
+    $h = (int)$h;
+    if ($h < 9) $h += 24;
+    return sprintf('%02d:%02d', $h, $m);
+}
+
 if (empty($_SESSION['user'])) {
-    echo json_encode([]);
-    exit;
+  echo json_encode([]);
+  exit;
 }
 
 $user_id = $_SESSION['user']['id'];
 
-// ユーザーのシフトを取得
 $stmt = $pdo->prepare("
-  SELECT date, shift_start, shift_end 
-  FROM shifts 
+  SELECT date, shift_start, shift_end
+  FROM shifts
   WHERE user_id = ?
 ");
 $stmt->execute([$user_id]);
-$shifts = $stmt->fetchAll();
+$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// FullCalendar用に整形
 $events = [];
 
 foreach ($shifts as $s) {
-    $start = $s['date'] . 'T' . $s['shift_start'];
-    $end   = $s['date'] . 'T' . $s['shift_end'];
+    $start = new DateTime("{$s['date']} {$s['shift_start']}");
+    $end   = new DateTime("{$s['date']} {$s['shift_end']}");
+    if ($end <= $start) $end->modify('+1 day');
+
+    $startLabel = formatHour($s['shift_start']);
+    $endLabel   = formatHour($s['shift_end']);
+
     $events[] = [
-        'title' => 'シフト',
-        'start' => $start,
-        'end'   => $end,
+        'title' => "{$startLabel}〜{$endLabel}",
+        'start' => $start->format('Y-m-d\TH:i:s'),
+        'end'   => $end->format('Y-m-d\TH:i:s'),
         'allDay' => false
     ];
 }

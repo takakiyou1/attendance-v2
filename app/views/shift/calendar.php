@@ -68,12 +68,33 @@
       }
       h1 { font-size: 20px; }
     }
+
+    /* ✅ メニューに戻るボタン */
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .back-btn:hover {
+      background: #0056b3;
+    }
   </style>
 </head>
 
 <body>
   <h1>📅 シフト管理カレンダー</h1>
   <div id="calendar"></div>
+
+  <!-- ✅ メニューに戻るリンク（シンプル） -->
+<p style="margin-top: 30px;">
+  <a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a>
+</p>
+
 
   <!-- モーダル -->
   <div id="modal">
@@ -183,7 +204,9 @@
           center: 'title',
           right: 'dayGridMonth,timeGridWeek'
         },
-        events: '/attendance-v2/api/get_all_shifts.php',
+        slotMinTime: "09:00:00",   // ✅ 開始時間（営業開始）
+        slotMaxTime: "29:00:00",   // ✅ 終了時間（翌5時 = 29時）
+        events: '/attendance-v2/public/index.php/api/shifts/all',
 
         dateClick: function(info) {
           const target = info.jsEvent.target;
@@ -195,7 +218,7 @@
         },
 
         eventClick: function(info) {
-          fetch('/attendance-v2/api/get_shift_by_id.php?id=' + info.event.id)
+          fetch('/attendance-v2/public/index.php/api/shifts/by-id?id=' + info.event.id)
             .then(res => res.json())
             .then(data => {
               openModal(data);
@@ -248,7 +271,7 @@
         if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
         if (!confirm('この繰り返し全体を削除しますか？')) return;
 
-        fetch('/attendance-v2/api/delete_shift_group.php', {
+        fetch('/attendance-v2/public/index.php/api/shifts/delete-group', {
           method: 'POST',
           body: new URLSearchParams({ repeat_id })
         })
@@ -261,53 +284,51 @@
       });
 
       // ✅ 繰り返し全体を変更
-document.getElementById('editGroupBtn').addEventListener('click', () => {
-  const shiftIdField = document.getElementById('shift-id');
-  const repeat_id = shiftIdField.dataset.repeatId;
-  if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
-  if (!confirm('この繰り返し全体を変更しますか？')) return;
+      document.getElementById('editGroupBtn').addEventListener('click', () => {
+        const shiftIdField = document.getElementById('shift-id');
+        const repeat_id = shiftIdField.dataset.repeatId;
+        if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
+        if (!confirm('この繰り返し全体を変更しますか？')) return;
 
-  fetch('/attendance-v2/api/update_shift_group.php', {
-    method: 'POST',
-    body: new URLSearchParams({
-      repeat_id,
-      user_id: document.getElementById('user_id').value,
-      shift_start: document.getElementById('shift_start').value,
-      shift_end: document.getElementById('shift_end').value
-    })
-  })
-  .then(res => res.json())
-  .then(res => {
-    alert(res.message);
-    closeModal();
-    calendar.refetchEvents();
-  })
-  .catch(err => console.error(err));
-});
+        fetch('/attendance-v2/public/index.php/api/shifts/update-group', {
+          method: 'POST',
+          body: new URLSearchParams({
+            repeat_id,
+            user_id: document.getElementById('user_id').value,
+            shift_start: document.getElementById('shift_start').value,
+            shift_end: document.getElementById('shift_end').value
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          alert(res.message);
+          closeModal();
+          calendar.refetchEvents();
+        })
+        .catch(err => console.error(err));
+      });
 
-// ✅ 単発シフト削除
-document.getElementById('deleteSingleBtn').addEventListener('click', () => {
-  const id = document.getElementById('shift-id').value;
-  if (!id) return alert('削除対象がありません');
-  if (!confirm('このシフトを削除しますか？')) return;
+      // ✅ 単発シフト削除
+      document.getElementById('deleteSingleBtn').addEventListener('click', () => {
+        const id = document.getElementById('shift-id').value;
+        if (!id) return alert('削除対象がありません');
+        if (!confirm('このシフトを削除しますか？')) return;
 
-  fetch('/attendance-v2/public/index.php/shift/delete', {
-    method: 'POST',
-    body: new URLSearchParams({ id })
-  })
-  .then(res => res.json())
-  .then(res => {
-    if (res.status === 'deleted') {
-      alert('シフトを削除しました');
-      closeModal();
-      calendar.refetchEvents();
-    } else {
-      alert('削除に失敗しました');
-    }
-  });
-});
-
-
+        fetch('/attendance-v2/public/index.php/shift/delete', {
+          method: 'POST',
+          body: new URLSearchParams({ id })
+        })
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === 'deleted') {
+            alert('シフトを削除しました');
+            closeModal();
+            calendar.refetchEvents();
+          } else {
+            alert('削除に失敗しました');
+          }
+        });
+      });
 
       // 閉じる
       closeBtn.addEventListener('click', closeModal);

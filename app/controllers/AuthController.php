@@ -1,6 +1,5 @@
 <?php
 // app/controllers/AuthController.php
-session_start();
 
 class AuthController extends Controller
 {
