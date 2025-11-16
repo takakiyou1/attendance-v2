@@ -30,11 +30,11 @@
       <li><a href="/attendance-v2/public/index.php/shift/calendar">📅 シフト管理</a></li>
       <li><a href="/attendance-v2/public/index.php/pay/summary">💰 報酬一覧</a></li>
        <li><a href="/attendance-v2/public/index.php/pay/settings">🧾 報酬設定一覧</a></li>
-      <li><a href="/attendance-v2/public/index.php/news/board">📰 社内ニュース</a></li>
+      <li><a href="/attendance-v2/public/index.php/news">📢 お知らせ</a></li>
     <?php else: ?>
       <li><a href="/attendance-v2/public/index.php/shift/view_all">📋 全体シフト</a></li>
       <li><a href="/attendance-v2/public/index.php/shift/view_my">📅 自分のシフト</a></li>
-      <li><a href="/attendance-v2/public/index.php/news/board">📰 社内ニュース</a></li>
+      <li><a href="/attendance-v2/public/index.php/news">📢 お知らせ</a></li>
       <li><a href="/attendance-v2/public/index.php/pay/my_pay">💰 自分の報酬</a></li>
     <?php endif; ?>
     <li><a href="/attendance-v2/public/index.php/logout">🚪 ログアウト</a></li>

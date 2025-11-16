@@ -124,6 +124,16 @@
         <label>終了時間</label>
         <input type="time" name="shift_end" id="shift_end" required>
 
+        <label>色</label>
+        <select name="color" id="color">
+          <option value="#000000">Black (#000000)</option>
+          <option value="#ffffff">White (#ffffff)</option>
+          <option value="#ff0000">Red (#ff0000)</option>
+          <option value="#0000ff">Blue (#0000ff)</option>
+          <option value="#008000">Green (#008000)</option>
+          <option value="#ffff00">Yellow (#ffff00)</option>
+        </select>
+
         <!-- 🔁 繰り返し設定エリア -->
         <div id="repeatArea" style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px; display:none;">
           <h4>🔁 繰り返し設定</h4>
@@ -176,6 +186,7 @@
       document.getElementById('date').value = data.date || '';
       document.getElementById('shift_start').value = data.shift_start || '';
       document.getElementById('shift_end').value = data.shift_end || '';
+      document.getElementById('color').value = data.color || '#0000ff';
 
       // ✅ 繰り返しシフトならタイトルに表示
       const modalTitle = document.getElementById('modal-title');
@@ -238,10 +249,17 @@
         })
         .then(res => res.json())
         .then(res => {
-          if (res.status === 'error') return alert(res.message);
-          alert('保存しました');
+          if (res.status === 'error') {
+            alert(res.message);
+            return;
+          }
+          alert(res.message || '保存しました');
           closeModal();
           calendar.refetchEvents();
+        })
+        .catch(err => {
+          console.error(err);
+          alert('エラーが発生しました');
         });
       });
 
@@ -258,8 +276,14 @@
           .then(res => res.json())
           .then(res => {
             alert(res.message);
-            closeModal();
-            calendar.refetchEvents();
+            if (res.status === 'success') {
+              closeModal();
+              calendar.refetchEvents();
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            alert('エラーが発生しました');
           });
         }
       });
@@ -320,13 +344,17 @@
         })
         .then(res => res.json())
         .then(res => {
-          if (res.status === 'deleted') {
-            alert('シフトを削除しました');
+          if (res.status === 'success') {
+            alert(res.message || 'シフトを削除しました');
             closeModal();
             calendar.refetchEvents();
           } else {
-            alert('削除に失敗しました');
+            alert(res.message || '削除に失敗しました');
           }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('エラーが発生しました');
         });
       });
 

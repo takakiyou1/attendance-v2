@@ -74,6 +74,12 @@ $router->get('/shift/view_all', 'ShiftController@view_all');
 $router->get('/shift/view_my', 'ShiftController@view_my');
 $router->get('/shift/my_day', 'ShiftController@my_day');
 
+// お知らせ管理
+$router->get('/news', 'NewsController@index');
+$router->get('/news/create', 'NewsController@create');
+$router->post('/news/store', 'NewsController@store');
+$router->post('/news/delete', 'NewsController@delete');
+
 // API Endpoints (new architecture)
 $router->get('/api/shifts/all', 'ShiftController@apiAll');
 $router->get('/api/shifts/my', 'ShiftController@apiMy');
