@@ -94,7 +94,7 @@ class ShiftController extends Controller
         $user_id = $_SESSION['user']['id'];
 
         // Detect context: all shifts or my shifts based on return type
-        $isAllShifts = ($returnType === 'view_all');
+        $isAllShifts = ($returnType === 'view_all' || $returnType === 'calendar');
 
         // Build full return URL for view
         $returnUrl = '/attendance-v2/public/index.php/shift/' . $returnType;
