@@ -223,7 +223,7 @@
         dateClick: function(info) {
           const target = info.jsEvent.target;
           if (target.classList.contains('fc-daygrid-day-number')) {
-            window.location.href = '/shift/day?date=' + info.dateStr;
+            window.location.href = '/attendance-v2/public/index.php/shift/my_day?date=' + info.dateStr + '&return=view_all';
             return;
           }
           openModal({ date: info.dateStr });
