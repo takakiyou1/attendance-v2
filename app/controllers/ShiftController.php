@@ -74,7 +74,8 @@ class ShiftController extends Controller
     }
 
     /**
-     * My day view
+     * My day view - shows shifts for a specific date
+     * Can show all shifts or just user's shifts depending on return URL
      */
     public function my_day()
     {
@@ -83,7 +84,45 @@ class ShiftController extends Controller
         }
 
         $date = $_GET['date'] ?? date('Y-m-d');
-        $this->view('shift/my_day', ['date' => $date]);
+        $returnUrl = $_GET['return'] ?? '/attendance-v2/public/index.php/shift/view_my';
+        $user_id = $_SESSION['user']['id'];
+
+        // Detect context: all shifts or my shifts based on return URL
+        $isAllShifts = strpos($returnUrl, 'view_all') !== false;
+
+        // Fetch shifts - load database connection
+        require __DIR__ . '/../../config/database.php';
+
+        if ($isAllShifts) {
+            // Show all shifts with user names
+            $stmt = $pdo->prepare("
+                SELECT shifts.shift_start, shifts.shift_end, shifts.color, users.name as user_name
+                FROM shifts
+                JOIN users ON shifts.user_id = users.id
+                WHERE shifts.date = ?
+                ORDER BY shifts.shift_start ASC
+            ");
+            $stmt->execute([$date]);
+        } else {
+            // Show only user's own shifts
+            $stmt = $pdo->prepare("
+                SELECT shift_start, shift_end, color
+                FROM shifts
+                WHERE user_id = ? AND date = ?
+                ORDER BY shift_start ASC
+            ");
+            $stmt->execute([$user_id, $date]);
+        }
+
+        $shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->view('shift/my_day', [
+            'date' => $date,
+            'returnUrl' => $returnUrl,
+            'isAllShifts' => $isAllShifts,
+            'shifts' => $shifts,
+            'count' => count($shifts)
+        ]);
     }
 
     // ========================================

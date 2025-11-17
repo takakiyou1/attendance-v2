@@ -1,41 +1,15 @@
 <?php
-require __DIR__ . '/../../../config/database.php';
-
-if (empty($_SESSION['user'])) {
-  exit('ログインしてください');
-}
-
-$user_id = $_SESSION['user']['id'];
-$name = $_SESSION['user']['name'];
-$date = $_GET['date'] ?? date('Y-m-d');
-$returnUrl = $_GET['return'] ?? '/attendance-v2/public/index.php/shift/view_my';
-
-// ✅ Detect context: all shifts or my shifts
-$isAllShifts = strpos($returnUrl, 'view_all') !== false;
-
-if ($isAllShifts) {
-  // Show all shifts with user names
-  $stmt = $pdo->prepare("
-    SELECT s.shift_start, s.shift_end, s.color, u.name as user_name
-    FROM shifts s
-    JOIN users u ON s.user_id = u.id
-    WHERE s.date = ?
-    ORDER BY s.shift_start ASC
-  ");
-  $stmt->execute([$date]);
-} else {
-  // Show only user's own shifts
-  $stmt = $pdo->prepare("
-    SELECT shift_start, shift_end, color
-    FROM shifts
-    WHERE user_id = ? AND date = ?
-    ORDER BY s.shift_start ASC
-  ");
-  $stmt->execute([$user_id, $date]);
-}
-
-$shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$count = count($shifts);
+/**
+ * My Day View - Display shifts for a specific date
+ * This view receives data from ShiftController::my_day()
+ *
+ * Variables available:
+ * - $date: The date being viewed
+ * - $returnUrl: URL to return to calendar
+ * - $isAllShifts: boolean - true if showing all shifts, false for user's shifts only
+ * - $shifts: array of shift data
+ * - $count: number of shifts
+ */
 ?>
 <!DOCTYPE html>
 <html lang="ja">
