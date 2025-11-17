@@ -111,8 +111,7 @@
 
       // ✅ 日付クリック時に一覧へ
       dateClick: function(info) {
-        const returnUrl = encodeURIComponent('/attendance-v2/public/index.php/shift/view_all');
-        window.location.href = '/attendance-v2/public/index.php/shift/my_day?date=' + info.dateStr + '&return=' + returnUrl;
+        window.location.href = '/attendance-v2/public/index.php/shift/my_day?date=' + info.dateStr + '&return=view_all';
       }
     });
 

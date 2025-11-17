@@ -79,16 +79,25 @@ class ShiftController extends Controller
      */
     public function my_day()
     {
+        // Debug log
+        error_log("my_day called - GET params: " . print_r($_GET, true));
+
         if (!Session::isLoggedIn()) {
             Response::redirect('/attendance-v2/public/index.php/login');
         }
 
         $date = $_GET['date'] ?? date('Y-m-d');
-        $returnUrl = $_GET['return'] ?? '/attendance-v2/public/index.php/shift/view_my';
+        $returnType = $_GET['return'] ?? 'view_my';
+
+        // Debug log
+        error_log("my_day - date: $date, returnType: $returnType");
         $user_id = $_SESSION['user']['id'];
 
-        // Detect context: all shifts or my shifts based on return URL
-        $isAllShifts = strpos($returnUrl, 'view_all') !== false;
+        // Detect context: all shifts or my shifts based on return type
+        $isAllShifts = ($returnType === 'view_all');
+
+        // Build full return URL for view
+        $returnUrl = '/attendance-v2/public/index.php/shift/' . $returnType;
 
         // Fetch shifts - load database connection
         require __DIR__ . '/../../config/database.php';
