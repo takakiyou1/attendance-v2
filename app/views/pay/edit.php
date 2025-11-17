@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>報酬編集</title>
+<title>報酬編集 | Re:time</title>
 <style>
 body { font-family: Meiryo, sans-serif; margin: 40px; text-align:center; }
 form { display:inline-block; text-align:left; }

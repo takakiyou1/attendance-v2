@@ -21,7 +21,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>特別手当一覧</title>
+  <title>特別手当一覧 | Re:time</title>
   <style>
     body { font-family: Meiryo, sans-serif; text-align:center; margin:40px; }
     table { border-collapse: collapse; width: 80%; margin: 20px auto; }
