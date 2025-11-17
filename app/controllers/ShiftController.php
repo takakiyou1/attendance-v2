@@ -338,23 +338,48 @@ class ShiftController extends Controller
 
     /**
      * Format shifts for FullCalendar (all shifts)
+     * Handles overnight shifts for 09:00-29:00 workday window
+     * Uses extended hour format (e.g., 27:00 instead of next day 03:00)
      */
     private function formatShiftsForCalendar(array $shifts): array
     {
         $events = [];
 
         foreach ($shifts as $s) {
+            // Parse shift times
+            $startParts = explode(':', $s['shift_start']);
+            $endParts = explode(':', $s['shift_end']);
+            $startHour = (int)$startParts[0];
+            $startMinute = (int)$startParts[1];
+            $startSecond = isset($startParts[2]) ? (int)$startParts[2] : 0;
+            $endHour = (int)$endParts[0];
+            $endMinute = (int)$endParts[1];
+            $endSecond = isset($endParts[2]) ? (int)$endParts[2] : 0;
+
+            // Start time is straightforward
             $start = new DateTime("{$s['date']} {$s['shift_start']}");
-            $end = new DateTime("{$s['date']} {$s['shift_end']}");
-            if ($end <= $start) $end->modify('+1 day');
+            $startStr = $start->format('Y-m-d\TH:i:s');
+
+            // For overnight shifts, use extended hours (24+) on the SAME date
+            $isOvernightShift = ($endHour < $startHour) || ($endHour < 9 && $startHour >= 9);
+
+            if ($isOvernightShift) {
+                // Add 24 to end hour to get extended format (e.g., 03:00 becomes 27:00)
+                $extendedEndHour = $endHour + 24;
+                $endStr = sprintf('%sT%02d:%02d:%02d', $s['date'], $extendedEndHour, $endMinute, $endSecond);
+            } else {
+                // Regular shift - use normal end time
+                $end = new DateTime("{$s['date']} {$s['shift_end']}");
+                $endStr = $end->format('Y-m-d\TH:i:s');
+            }
 
             $repeatMark = !empty($s['repeat_id']) ? '※繰り返し ' : '';
 
             $events[] = [
                 'id' => $s['id'],
                 'title' => $repeatMark . "{$s['user_name']}（{$s['shift_start']}〜{$s['shift_end']}）",
-                'start' => $start->format('Y-m-d\TH:i:s'),
-                'end' => $end->format('Y-m-d\TH:i:s'),
+                'start' => $startStr,
+                'end' => $endStr,
                 'allDay' => false,
                 'color' => $s['color'] ?? '#000000'
             ];
@@ -365,29 +390,49 @@ class ShiftController extends Controller
 
     /**
      * Format shifts for FullCalendar (my shifts)
+     * Handles overnight shifts for 09:00-29:00 workday window
+     * Uses extended hour format (e.g., 27:00 instead of next day 03:00)
      */
     private function formatMyShiftsForCalendar(array $shifts): array
     {
         $events = [];
 
         foreach ($shifts as $s) {
+            // Parse shift times
+            $startParts = explode(':', $s['shift_start']);
+            $endParts = explode(':', $s['shift_end']);
+            $startHour = (int)$startParts[0];
+            $startMinute = (int)$startParts[1];
+            $startSecond = isset($startParts[2]) ? (int)$startParts[2] : 0;
+            $endHour = (int)$endParts[0];
+            $endMinute = (int)$endParts[1];
+            $endSecond = isset($endParts[2]) ? (int)$endParts[2] : 0;
+
+            // Start time is straightforward
             $start = new DateTime("{$s['date']} {$s['shift_start']}");
-            $end = new DateTime("{$s['date']} {$s['shift_end']}");
-            if ($end <= $start) $end->modify('+1 day');
+            $startStr = $start->format('Y-m-d\TH:i:s');
 
-            // Format hour for display
-            $startHour = (int)substr($s['shift_start'], 0, 2);
-            $endHour = (int)substr($s['shift_end'], 0, 2);
-            if ($startHour < 9) $startHour += 24;
-            if ($endHour < 9) $endHour += 24;
+            // For overnight shifts, use extended hours (24+) on the SAME date
+            $isOvernightShift = ($endHour < $startHour) || ($endHour < 9 && $startHour >= 9);
 
-            $startLabel = sprintf('%02d:%s', $startHour, substr($s['shift_start'], 3, 2));
-            $endLabel = sprintf('%02d:%s', $endHour, substr($s['shift_end'], 3, 2));
+            if ($isOvernightShift) {
+                // Add 24 to end hour to get extended format (e.g., 03:00 becomes 27:00)
+                $extendedEndHour = $endHour + 24;
+                $endStr = sprintf('%sT%02d:%02d:%02d', $s['date'], $extendedEndHour, $endMinute, $endSecond);
+            } else {
+                // Regular shift - use normal end time
+                $end = new DateTime("{$s['date']} {$s['shift_end']}");
+                $endStr = $end->format('Y-m-d\TH:i:s');
+            }
+
+            // Format display labels for 24+ hour format (e.g., 27:00 instead of 03:00)
+            $startLabel = $startHour < 9 ? sprintf('%02d:%02d', $startHour + 24, $startMinute) : sprintf('%02d:%02d', $startHour, $startMinute);
+            $endLabel = $endHour < 9 ? sprintf('%02d:%02d', $endHour + 24, $endMinute) : sprintf('%02d:%02d', $endHour, $endMinute);
 
             $events[] = [
                 'title' => "{$startLabel}〜{$endLabel}",
-                'start' => $start->format('Y-m-d\TH:i:s'),
-                'end' => $end->format('Y-m-d\TH:i:s'),
+                'start' => $startStr,
+                'end' => $endStr,
                 'allDay' => false,
                 'color' => $s['color'] ?? '#3788d8'
             ];

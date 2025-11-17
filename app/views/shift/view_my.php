@@ -102,6 +102,11 @@
         right: 'dayGridMonth,timeGridWeek'
       },
 
+      // ✅ 営業時間設定（09:00〜翌5:00 = 29:00）
+      slotMinTime: '09:00:00',
+      slotMaxTime: '29:00:00',
+      nextDayThreshold: '09:00:00', // ✅ 深夜シフトを翌日扱いしない（9時前は当日扱い）
+
       // ✅ 日付クリックで自分のシフト一覧へ
       dateClick: function(info) {
         const returnUrl = encodeURIComponent('/attendance-v2/public/index.php/shift/view_my');

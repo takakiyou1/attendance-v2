@@ -217,6 +217,7 @@
         },
         slotMinTime: "09:00:00",   // ✅ 開始時間（営業開始）
         slotMaxTime: "29:00:00",   // ✅ 終了時間（翌5時 = 29時）
+        nextDayThreshold: "09:00:00", // ✅ 深夜シフトを翌日扱いしない（9時前は当日扱い）
         events: '/attendance-v2/public/index.php/api/shifts/all',
 
         dateClick: function(info) {

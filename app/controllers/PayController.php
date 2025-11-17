@@ -15,21 +15,34 @@ class PayController extends Controller
         $month = $_GET['month'] ?? date('Y-m');
 
         // ✅ 1. 報酬履歴をもとにシフト集計
+        // Note: For overnight shifts (e.g., 22:00-03:00), we add 24 hours if shift_end < shift_start
         $sql = "
-            SELECT 
+            SELECT
                 s.user_id,
                 u.name,
                 h.pay_type,
                 h.pay_rate,
                 DATE_FORMAT(s.date, '%Y-%m') AS month,
-                SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600) AS total_hours,
-                CASE 
+                SUM(
+                    CASE
+                        WHEN s.shift_end < s.shift_start
+                        THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                        ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                    END
+                ) AS total_hours,
+                CASE
                     WHEN h.pay_type = 'fixed' THEN h.pay_rate
-                    ELSE ROUND(SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600) * h.pay_rate)
+                    ELSE ROUND(SUM(
+                        CASE
+                            WHEN s.shift_end < s.shift_start
+                            THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                            ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                        END
+                    ) * h.pay_rate)
                 END AS calculated_pay
             FROM shifts s
             JOIN users u ON s.user_id = u.id
-            JOIN pay_rate_history h 
+            JOIN pay_rate_history h
               ON h.user_id = s.user_id
               AND s.date BETWEEN h.start_date AND COALESCE(h.end_date, '9999-12-31')
             WHERE DATE_FORMAT(s.date, '%Y-%m') = ?
@@ -86,22 +99,35 @@ class PayController extends Controller
         if (!$user_id) exit('不正なアクセスです');
 
         // スタッフ情報＋自動計算額・上書き額を取得
+        // Note: For overnight shifts (e.g., 22:00-03:00), we add 24 hours if shift_end < shift_start
         $stmt = $pdo->prepare("
-            SELECT 
+            SELECT
                 u.id AS user_id,
                 u.name,
                 u.pay_type,
                 u.pay_rate,
-                COALESCE(SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600), 0) AS total_hours,
-                CASE 
+                COALESCE(SUM(
+                    CASE
+                        WHEN s.shift_end < s.shift_start
+                        THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                        ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                    END
+                ), 0) AS total_hours,
+                CASE
                     WHEN u.pay_type = 'fixed' THEN u.pay_rate
-                    ELSE ROUND(SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600) * u.pay_rate)
+                    ELSE ROUND(SUM(
+                        CASE
+                            WHEN s.shift_end < s.shift_start
+                            THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                            ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                        END
+                    ) * u.pay_rate)
                 END AS auto_amount,
                 m.override_amount AS manual_amount
             FROM users u
-            LEFT JOIN shifts s 
+            LEFT JOIN shifts s
               ON u.id = s.user_id AND DATE_FORMAT(s.date, '%Y-%m') = ?
-            LEFT JOIN manual_payments m 
+            LEFT JOIN manual_payments m
               ON u.id = m.user_id AND m.month = ?
             WHERE u.id = ?
             GROUP BY u.id, u.name, u.pay_type, u.pay_rate, m.override_amount
@@ -204,17 +230,30 @@ class PayController extends Controller
         require __DIR__ . '/../../config/database.php';
 
         // ✅ 1. 基本報酬（履歴に基づく）
+        // Note: For overnight shifts (e.g., 22:00-03:00), we add 24 hours if shift_end < shift_start
         $sql = "
-            SELECT 
-                SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600) AS total_hours,
+            SELECT
+                SUM(
+                    CASE
+                        WHEN s.shift_end < s.shift_start
+                        THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                        ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                    END
+                ) AS total_hours,
                 h.pay_type,
                 h.pay_rate,
-                CASE 
+                CASE
                     WHEN h.pay_type = 'fixed' THEN h.pay_rate
-                    ELSE ROUND(SUM(TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600) * h.pay_rate)
+                    ELSE ROUND(SUM(
+                        CASE
+                            WHEN s.shift_end < s.shift_start
+                            THEN TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600 + 24
+                            ELSE TIME_TO_SEC(TIMEDIFF(s.shift_end, s.shift_start)) / 3600
+                        END
+                    ) * h.pay_rate)
                 END AS base_pay
             FROM shifts s
-            JOIN pay_rate_history h 
+            JOIN pay_rate_history h
               ON h.user_id = s.user_id
               AND s.date BETWEEN h.start_date AND COALESCE(h.end_date, '9999-12-31')
             WHERE s.user_id = ? AND DATE_FORMAT(s.date, '%Y-%m') = ?
