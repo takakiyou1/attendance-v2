@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>お知らせ投稿 | 勤怠管理システム</title>
+  <title>お知らせ投稿 | Re:time</title>
   <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
 </head>
 <body>

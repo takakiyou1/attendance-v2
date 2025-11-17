@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メニュー | 勤怠管理システム</title>
+  <title>メニュー | Re:time</title>
   <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
   <style>
     body {
@@ -134,7 +134,7 @@
   <!-- Header -->
   <div class="header">
     <div class="header-content">
-      <div class="logo">📊 勤怠管理システム</div>
+      <div class="logo">⏱️ Re:time</div>
       <div class="user-info">
         <div class="user-avatar">
           <?= strtoupper(mb_substr($_SESSION['user']['name'], 0, 1)) ?>
@@ -256,7 +256,7 @@
   <!-- Footer -->
   <div class="footer">
     <p style="margin: 0; color: var(--color-text-tertiary); font-size: var(--text-sm);">
-      © <?= date('Y') ?> 勤怠管理システム
+      © <?= date('Y') ?> Re:time
     </p>
   </div>
 </body>
