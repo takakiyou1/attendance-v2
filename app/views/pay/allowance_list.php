@@ -58,13 +58,13 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
   </table>
 
-  <p><a href="/attendance-v2/public/pay/summary?month=<?= $month ?>">← 報酬一覧へ戻る</a></p>
+  <p><a href="/attendance-v2/public/index.php/pay/summary?month=<?= $month ?>">← 報酬一覧へ戻る</a></p>
 
   <script>
   // ✅ 手当追加
   document.getElementById('addForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('/attendance-v2/public/attendance-v2/api/save_special_allowance.php', {
+    fetch('/attendance-v2/public/index.php/attendance-v2/api/save_special_allowance.php', {
       method: 'POST',
       body: new FormData(e.target)
     })
@@ -78,7 +78,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
   // ✅ 手当削除
   function deleteAllowance(id) {
     if (!confirm('この手当を削除しますか？')) return;
-    fetch('/attendance-v2/public/attendance-v2/api/delete_special_allowance.php', {
+    fetch('/attendance-v2/public/index.php/attendance-v2/api/delete_special_allowance.php', {
       method: 'POST',
       body: new URLSearchParams({ id })
     })

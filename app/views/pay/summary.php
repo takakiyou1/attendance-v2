@@ -52,14 +52,14 @@
       <td><?= number_format($d['special_allowance'] ?? 0) ?> 円</td> <!-- 追加 -->
       <td><strong><?= number_format($d['total_pay'] ?? $d['calculated_pay']) ?> 円</strong></td> <!-- 追加 -->
       <td>
-        <a href="/attendance-v2/public/pay/edit?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">編集</a> |
-        <a href="/attendance-v2/public/pay/allowance_list?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">手当一覧</a>
+        <a href="/attendance-v2/public/index.php/pay/edit?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">編集</a> |
+        <a href="/attendance-v2/public/index.php/pay/allowance_list?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">手当一覧</a>
       </td>
     </tr>
   <?php endforeach; ?>
 </table>
 
 
-  <h2><a href="/attendance-v2/public/menu">← メニューに戻る</a></h2>
+  <h2><a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a></h2>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>自分のシフト</title>
-  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/index.php/css/modern-design.css">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <style>
@@ -74,7 +74,7 @@
           📅 <?= htmlspecialchars($_SESSION['user']['name']) ?> さんのシフト
         </h1>
         <div class="page-actions">
-          <a href="/attendance-v2/public/menu" class="btn btn-secondary">
+          <a href="/attendance-v2/public/index.php/menu" class="btn btn-secondary">
             ← メニューに戻る
           </a>
         </div>
@@ -93,7 +93,7 @@
     const calendar = new FullCalendar.Calendar(calendarEl, {
       locale: 'ja',
       initialView: 'dayGridMonth',
-      events: '/attendance-v2/public/api/shifts/my',
+      events: '/attendance-v2/public/index.php/api/shifts/my',
       editable: false,
       selectable: false,
       headerToolbar: {

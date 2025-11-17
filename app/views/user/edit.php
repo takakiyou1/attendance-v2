@@ -14,7 +14,7 @@
 </head>
 <body>
   <h1 style="text-align:center;"><?= $mode === 'create' ? '新規ユーザー登録' : 'ユーザー編集' ?></h1>
-  <form method="POST" action="/attendance-v2/public/user/save">
+  <form method="POST" action="/attendance-v2/public/index.php/user/save">
     <?php if ($mode === 'edit'): ?>
       <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
     <?php endif; ?>
@@ -46,6 +46,6 @@
     <button type="submit"><?= $mode === 'create' ? '登録' : '更新' ?></button>
   </form>
 
-  <a href="/attendance-v2/public/user/list">← 一覧に戻る</a>
+  <a href="/attendance-v2/public/index.php/user/list">← 一覧に戻る</a>
 </body>
 </html>
