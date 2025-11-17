@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ユーザー一覧 | Re:time</title>
+  <title>ユーザー一覧</title>
   <style>
     table { border-collapse: collapse; margin: 20px auto; width: 90%; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }

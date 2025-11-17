@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title><?= $mode === 'create' ? '新規ユーザー登録' : 'ユーザー編集' ?> | Re:time</title>
+  <title><?= $mode === 'create' ? '新規ユーザー登録' : 'ユーザー編集' ?></title>
   <style>
     form { width: 400px; margin: 40px auto; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
     label { display: block; margin: 10px 0 5px; }

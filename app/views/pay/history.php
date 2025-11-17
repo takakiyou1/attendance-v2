@@ -21,7 +21,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>報酬履歴 | Re:time</title>
+  <title>報酬履歴</title>
   <style>
     table { border-collapse: collapse; width: 80%; margin: 40px auto; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }

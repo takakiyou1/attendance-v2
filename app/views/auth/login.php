@@ -2,25 +2,13 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ログイン | Re:time</title>
+  <title>ログイン</title>
   <style>
     body {
       font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
       background-color: #f9f9f9;
       text-align: center;
       margin-top: 100px;
-    }
-    .logo {
-      font-size: 48px;
-      font-weight: bold;
-      color: #0066cc;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-    }
-    .tagline {
-      color: #666;
-      margin-bottom: 40px;
-      font-size: 14px;
     }
     form {
       display: inline-block;
@@ -54,8 +42,7 @@
   </style>
 </head>
 <body>
-  <div class="logo">Re:time</div>
-  <p class="tagline">シフト・勤怠管理システム</p>
+  <h1>ログイン画面</h1>
 
   <?php if (!empty($error)): ?>
     <p class="error"><?= htmlspecialchars($error) ?></p>

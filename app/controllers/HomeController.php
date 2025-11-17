@@ -7,7 +7,7 @@ class HomeController extends Controller
     {
         // 変数をビューに渡して表示
         $this->view('home/index', [
-            'title' => 'Re:time',
+            'title' => '勤怠管理システム',
             'message' => '✅ MVC構造テストページです。'
         ]);
     }
