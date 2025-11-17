@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>全体シフト | Re:time</title>
-  <link rel="stylesheet" href="/attendance-v2/public/index.php/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <style>

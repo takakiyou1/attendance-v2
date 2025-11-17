@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メニュー | Re:time</title>
-  <link rel="stylesheet" href="/attendance-v2/public/index.php/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
   <style>
     body {
       display: flex;

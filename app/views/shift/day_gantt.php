@@ -18,7 +18,7 @@ $count = count($shifts);
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title><?= htmlspecialchars($date) ?> のシフト一覧</title>
+<title><?= htmlspecialchars($date) ?> のシフト一覧 | Re:time</title>
 <style>
 body { font-family: Meiryo, sans-serif; background:#fafafa; text-align:center; margin:40px; }
 h1 { margin-bottom:10px; }
