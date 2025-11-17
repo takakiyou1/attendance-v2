@@ -109,8 +109,8 @@
 
       // ✅ 日付クリックで自分のシフト一覧へ
       dateClick: function(info) {
-        const returnUrl = encodeURIComponent('/shift/view_my');
-        window.location.href = '/shift/my_day?date=' + info.dateStr + '&return=' + returnUrl;
+        const returnUrl = encodeURIComponent('/attendance-v2/public/index.php/shift/view_my');
+        window.location.href = '/attendance-v2/public/index.php/shift/my_day?date=' + info.dateStr + '&return=' + returnUrl;
       }
     });
 
