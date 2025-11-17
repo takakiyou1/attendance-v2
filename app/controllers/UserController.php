@@ -15,7 +15,7 @@ class UserController extends Controller
     private function requireAdmin()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
     }
@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $id = $_GET['id'] ?? null;
         if (!$id) {
-            header('Location: /attendance-v2/public/index.php/user/list');
+            header('Location: ' . url('user/list'));
             exit;
         }
 
@@ -85,7 +85,7 @@ class UserController extends Controller
             }
         }
 
-        header('Location: /attendance-v2/public/index.php/user/list');
+        header('Location: ' . url('user/list'));
         exit;
     }
 
@@ -100,7 +100,7 @@ class UserController extends Controller
             $stmt->execute([$id]);
         }
 
-        header('Location: /attendance-v2/public/index.php/user/list');
+        header('Location: ' . url('user/list'));
         exit;
     }
 }

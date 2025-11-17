@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         if (empty($email) || empty($password)) {
             $_SESSION['error'] = 'メールアドレスとパスワードを入力してください。';
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -33,11 +33,11 @@ class AuthController extends Controller
         // パスワード照合
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user;
-            header('Location: /attendance-v2/public/index.php/menu');
+            header('Location: ' . url('menu'));
             exit;
         } else {
             $_SESSION['error'] = 'メールアドレスまたはパスワードが正しくありません。';
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
     }
@@ -46,7 +46,7 @@ class AuthController extends Controller
     public function logout()
     {
         session_destroy();
-        header('Location: /attendance-v2/public/index.php/login');
+        header('Location: ' . url('login'));
         exit;
     }
 }

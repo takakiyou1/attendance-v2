@@ -5,7 +5,7 @@ class PayController extends Controller
     public function summary()
     {
         if (empty($_SESSION['user'])) {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -88,7 +88,7 @@ class PayController extends Controller
     public function edit()
     {
         if (empty($_SESSION['user'])) {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -146,7 +146,7 @@ class PayController extends Controller
     public function settings()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -166,7 +166,7 @@ class PayController extends Controller
     public function setting_edit()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -185,7 +185,7 @@ class PayController extends Controller
     public function history()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -199,7 +199,7 @@ class PayController extends Controller
     public function allowance_list()
     {
         if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 
@@ -218,7 +218,7 @@ class PayController extends Controller
     public function my_pay()
     {
         if (empty($_SESSION['user'])) {
-            header('Location: /attendance-v2/public/index.php/login');
+            header('Location: ' . url('login'));
             exit;
         }
 

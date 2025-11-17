@@ -4,6 +4,9 @@
  * Entry point for all requests
  */
 
+// Load environment configuration first
+require_once __DIR__ . '/../config/environment.php';
+
 // Load core classes
 require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../core/Session.php';

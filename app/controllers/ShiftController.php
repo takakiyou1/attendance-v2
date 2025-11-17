@@ -80,7 +80,7 @@ class ShiftController extends Controller
     public function my_day()
     {
         if (!Session::isLoggedIn()) {
-            Response::redirect('/attendance-v2/public/index.php/login');
+            Response::redirect(url('login'));
         }
 
         $date = $_GET['date'] ?? date('Y-m-d');
@@ -91,7 +91,7 @@ class ShiftController extends Controller
         $isAllShifts = ($returnType === 'view_all' || $returnType === 'calendar');
 
         // Build full return URL for view
-        $returnUrl = '/attendance-v2/public/index.php/shift/' . $returnType;
+        $returnUrl = url('shift/' . $returnType);
 
         // Fetch shifts - load database connection
         require __DIR__ . '/../../config/database.php';
