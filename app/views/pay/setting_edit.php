@@ -48,7 +48,7 @@ button { margin-top:15px; padding:10px 20px; border:none; border-radius:5px; col
     .then(res => res.json())
     .then(res => {
       alert(res.message);
-      location.href = '/attendance-v2/public/index.php/pay/settings';
+      location.href = '/pay/settings';
     });
   });
   </script>

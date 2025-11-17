@@ -74,7 +74,7 @@ a:hover { text-decoration: underline; }
 <?php endif; ?>
 
 <p style="margin-top:30px;">
-  <a href="/attendance-v2/public/index.php/shift/calendar">← カレンダーに戻る</a>
+  <a href="/shift/calendar">← カレンダーに戻る</a>
 </p>
 
 </body>

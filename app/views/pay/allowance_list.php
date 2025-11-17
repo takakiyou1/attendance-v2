@@ -58,7 +58,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
   </table>
 
-  <p><a href="/attendance-v2/public/index.php/pay/summary?month=<?= $month ?>">← 報酬一覧へ戻る</a></p>
+  <p><a href="/pay/summary?month=<?= $month ?>">← 報酬一覧へ戻る</a></p>
 
   <script>
   // ✅ 手当追加

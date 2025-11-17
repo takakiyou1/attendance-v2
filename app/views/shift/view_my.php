@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>自分のシフト | Re:time</title>
-  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
+  <link rel="stylesheet" href="/css/modern-design.css">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <style>
@@ -74,7 +74,7 @@
           📅 <?= htmlspecialchars($_SESSION['user']['name']) ?> さんのシフト
         </h1>
         <div class="page-actions">
-          <a href="/attendance-v2/public/index.php/menu" class="btn btn-secondary">
+          <a href="/menu" class="btn btn-secondary">
             ← メニューに戻る
           </a>
         </div>
@@ -93,7 +93,7 @@
     const calendar = new FullCalendar.Calendar(calendarEl, {
       locale: 'ja',
       initialView: 'dayGridMonth',
-      events: '/attendance-v2/public/index.php/api/shifts/my',
+      events: '/api/shifts/my',
       editable: false,
       selectable: false,
       headerToolbar: {
@@ -109,8 +109,8 @@
 
       // ✅ 日付クリックで自分のシフト一覧へ
       dateClick: function(info) {
-        const returnUrl = encodeURIComponent('/attendance-v2/public/index.php/shift/view_my');
-        window.location.href = '/attendance-v2/public/index.php/shift/my_day?date=' + info.dateStr + '&return=' + returnUrl;
+        const returnUrl = encodeURIComponent('/shift/view_my');
+        window.location.href = '/shift/my_day?date=' + info.dateStr + '&return=' + returnUrl;
       }
     });
 

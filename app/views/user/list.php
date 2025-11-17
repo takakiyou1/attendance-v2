@@ -23,7 +23,7 @@
 </head>
 <body>
   <h1>ユーザー一覧</h1>
-  <a class="add-btn" href="/attendance-v2/public/index.php/user/create">＋ 新規ユーザー追加</a>
+  <a class="add-btn" href="/user/create">＋ 新規ユーザー追加</a>
 
   <table>
     <tr>
@@ -44,13 +44,13 @@
         <td><?= htmlspecialchars($u['pay_type']) ?></td>
         <td><?= number_format($u['pay_rate']) ?></td>
         <td>
-          <a href="/attendance-v2/public/index.php/user/edit?id=<?= $u['id'] ?>">編集</a> |
-          <a href="/attendance-v2/public/index.php/user/delete?id=<?= $u['id'] ?>" onclick="return confirm('削除しますか？')">削除</a>
+          <a href="/user/edit?id=<?= $u['id'] ?>">編集</a> |
+          <a href="/user/delete?id=<?= $u['id'] ?>" onclick="return confirm('削除しますか？')">削除</a>
         </td>
       </tr>
     <?php endforeach; ?>
   </table>
 
-  <p><a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a></p>
+  <p><a href="/menu">← メニューに戻る</a></p>
 </body>
 </html>

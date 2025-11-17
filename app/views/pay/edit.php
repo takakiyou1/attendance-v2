@@ -46,7 +46,7 @@ button { margin-top:15px; padding:10px 20px; background:#007bff; color:white; bo
     .then(res => res.json())
     .then(res => {
       alert(res.message);
-      location.href = '/attendance-v2/public/index.php/pay/summary';
+      location.href = '/pay/summary';
     });
   });
   </script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メニュー | Re:time</title>
-  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
+  <link rel="stylesheet" href="/css/modern-design.css">
   <style>
     body {
       display: flex;
@@ -163,7 +163,7 @@
       <div class="menu-section">
         <h2 class="menu-section-title">管理機能</h2>
         <div class="menu-grid">
-          <a href="/attendance-v2/public/index.php/user/list" class="menu-item">
+          <a href="/user/list" class="menu-item">
             <div class="menu-item-icon">👥</div>
             <div class="menu-item-content">
               <div class="menu-item-title">ユーザー管理</div>
@@ -171,7 +171,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/shift/calendar" class="menu-item">
+          <a href="/shift/calendar" class="menu-item">
             <div class="menu-item-icon">📅</div>
             <div class="menu-item-content">
               <div class="menu-item-title">シフト管理</div>
@@ -179,7 +179,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/pay/summary" class="menu-item">
+          <a href="/pay/summary" class="menu-item">
             <div class="menu-item-icon">💰</div>
             <div class="menu-item-content">
               <div class="menu-item-title">報酬一覧</div>
@@ -187,7 +187,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/pay/settings" class="menu-item">
+          <a href="/pay/settings" class="menu-item">
             <div class="menu-item-icon">🧾</div>
             <div class="menu-item-content">
               <div class="menu-item-title">報酬設定</div>
@@ -195,7 +195,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/news" class="menu-item">
+          <a href="/news" class="menu-item">
             <div class="menu-item-icon">📢</div>
             <div class="menu-item-content">
               <div class="menu-item-title">お知らせ</div>
@@ -210,7 +210,7 @@
       <div class="menu-section">
         <h2 class="menu-section-title">スタッフ機能</h2>
         <div class="menu-grid">
-          <a href="/attendance-v2/public/index.php/shift/view_all" class="menu-item">
+          <a href="/shift/view_all" class="menu-item">
             <div class="menu-item-icon">📋</div>
             <div class="menu-item-content">
               <div class="menu-item-title">全体シフト</div>
@@ -218,7 +218,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/shift/view_my" class="menu-item">
+          <a href="/shift/view_my" class="menu-item">
             <div class="menu-item-icon">📅</div>
             <div class="menu-item-content">
               <div class="menu-item-title">自分のシフト</div>
@@ -226,7 +226,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/news" class="menu-item">
+          <a href="/news" class="menu-item">
             <div class="menu-item-icon">📢</div>
             <div class="menu-item-content">
               <div class="menu-item-title">お知らせ</div>
@@ -234,7 +234,7 @@
             </div>
           </a>
 
-          <a href="/attendance-v2/public/index.php/pay/my_pay" class="menu-item">
+          <a href="/pay/my_pay" class="menu-item">
             <div class="menu-item-icon">💰</div>
             <div class="menu-item-content">
               <div class="menu-item-title">自分の報酬</div>
@@ -247,7 +247,7 @@
 
     <!-- Logout -->
     <div class="logout-btn">
-      <a href="/attendance-v2/public/index.php/logout" class="btn btn-outline btn-lg">
+      <a href="/logout" class="btn btn-outline btn-lg">
         🚪 ログアウト
       </a>
     </div>

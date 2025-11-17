@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>お知らせ投稿 | Re:time</title>
-  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
+  <link rel="stylesheet" href="/css/modern-design.css">
 </head>
 <body>
   <!-- Header -->
@@ -15,7 +15,7 @@
           📝 お知らせ投稿
         </h1>
         <div class="page-actions">
-          <a href="/attendance-v2/public/index.php/news" class="btn btn-secondary">
+          <a href="/news" class="btn btn-secondary">
             ← 一覧に戻る
           </a>
         </div>
@@ -60,7 +60,7 @@
           <button type="submit" class="btn btn-primary" style="flex: 1;">
             📤 投稿する
           </button>
-          <a href="/attendance-v2/public/index.php/news" class="btn btn-outline" style="flex: 1;">
+          <a href="/news" class="btn btn-outline" style="flex: 1;">
             キャンセル
           </a>
         </div>
@@ -80,7 +80,7 @@
 
       const formData = new FormData(form);
 
-      fetch('/attendance-v2/public/index.php/news/store', {
+      fetch('/news/store', {
         method: 'POST',
         body: formData
       })
@@ -88,7 +88,7 @@
       .then(res => {
         if (res.status === 'success') {
           alert(res.message || 'お知らせを投稿しました');
-          window.location.href = '/attendance-v2/public/index.php/news';
+          window.location.href = '/news';
         } else {
           alert(res.message || '投稿に失敗しました');
           submitBtn.disabled = false;

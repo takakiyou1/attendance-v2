@@ -60,6 +60,6 @@ th { background: #f2f2f2; }
     </tr>
   </table>
 
-  <h2><a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a></h2>
+  <h2><a href="/menu">← メニューに戻る</a></h2>
 </body>
 </html>

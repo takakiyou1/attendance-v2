@@ -92,7 +92,7 @@
 
   <!-- ✅ メニューに戻るリンク（シンプル） -->
 <p style="margin-top: 30px;">
-  <a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a>
+  <a href="/menu">← メニューに戻る</a>
 </p>
 
 
@@ -218,19 +218,19 @@
         slotMinTime: "09:00:00",   // ✅ 開始時間（営業開始）
         slotMaxTime: "29:00:00",   // ✅ 終了時間（翌5時 = 29時）
         nextDayThreshold: "09:00:00", // ✅ 深夜シフトを翌日扱いしない（9時前は当日扱い）
-        events: '/attendance-v2/public/index.php/api/shifts/all',
+        events: '/api/shifts/all',
 
         dateClick: function(info) {
           const target = info.jsEvent.target;
           if (target.classList.contains('fc-daygrid-day-number')) {
-            window.location.href = '/attendance-v2/public/index.php/shift/day?date=' + info.dateStr;
+            window.location.href = '/shift/day?date=' + info.dateStr;
             return;
           }
           openModal({ date: info.dateStr });
         },
 
         eventClick: function(info) {
-          fetch('/attendance-v2/public/index.php/api/shifts/by-id?id=' + info.event.id)
+          fetch('/api/shifts/by-id?id=' + info.event.id)
             .then(res => res.json())
             .then(data => {
               openModal(data);
@@ -244,7 +244,7 @@
       // 単発保存
       form.addEventListener('submit', e => {
         e.preventDefault();
-        fetch('/attendance-v2/public/index.php/shift/save', {
+        fetch('/shift/save', {
           method: 'POST',
           body: new FormData(form)
         })
@@ -270,7 +270,7 @@
         if (area.style.display === 'none') {
           area.style.display = 'block';
         } else {
-          fetch('/attendance-v2/public/index.php/shift/save_repeat', {
+          fetch('/shift/save_repeat', {
             method: 'POST',
             body: new FormData(form)
           })
@@ -296,7 +296,7 @@
         if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
         if (!confirm('この繰り返し全体を削除しますか？')) return;
 
-        fetch('/attendance-v2/public/index.php/api/shifts/delete-group', {
+        fetch('/api/shifts/delete-group', {
           method: 'POST',
           body: new URLSearchParams({ repeat_id })
         })
@@ -315,7 +315,7 @@
         if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
         if (!confirm('この繰り返し全体を変更しますか？')) return;
 
-        fetch('/attendance-v2/public/index.php/api/shifts/update-group', {
+        fetch('/api/shifts/update-group', {
           method: 'POST',
           body: new URLSearchParams({
             repeat_id,
@@ -339,7 +339,7 @@
         if (!id) return alert('削除対象がありません');
         if (!confirm('このシフトを削除しますか？')) return;
 
-        fetch('/attendance-v2/public/index.php/shift/delete', {
+        fetch('/shift/delete', {
           method: 'POST',
           body: new URLSearchParams({ id })
         })
