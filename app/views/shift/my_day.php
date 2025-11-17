@@ -17,7 +17,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($date) ?> の<?= $isAllShifts ? '全体シフト' : '自分のシフト' ?></title>
-  <link rel="stylesheet" href="/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
   <style>
     .color-box {
       display: inline-block;

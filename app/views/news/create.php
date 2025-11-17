@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>お知らせ投稿</title>
-  <link rel="stylesheet" href="/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
 </head>
 <body>
   <!-- Header -->
@@ -15,7 +15,7 @@
           📝 お知らせ投稿
         </h1>
         <div class="page-actions">
-          <a href="/news" class="btn btn-secondary">
+          <a href="/attendance-v2/public/news" class="btn btn-secondary">
             ← 一覧に戻る
           </a>
         </div>
@@ -60,7 +60,7 @@
           <button type="submit" class="btn btn-primary" style="flex: 1;">
             📤 投稿する
           </button>
-          <a href="/news" class="btn btn-outline" style="flex: 1;">
+          <a href="/attendance-v2/public/news" class="btn btn-outline" style="flex: 1;">
             キャンセル
           </a>
         </div>
@@ -80,7 +80,7 @@
 
       const formData = new FormData(form);
 
-      fetch('/news/store', {
+      fetch('/attendance-v2/public/news/store', {
         method: 'POST',
         body: formData
       })

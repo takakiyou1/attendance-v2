@@ -39,7 +39,7 @@ button { margin-top:15px; padding:10px 20px; background:#007bff; color:white; bo
   <script>
   document.getElementById('payEditForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('/attendance-v2/api/save_pay_edit.php', {
+    fetch('/attendance-v2/public/attendance-v2/api/save_pay_edit.php', {
       method: 'POST',
       body: new FormData(e.target)
     })

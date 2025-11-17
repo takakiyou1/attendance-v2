@@ -48,7 +48,7 @@
     <p class="error"><?= htmlspecialchars($error) ?></p>
   <?php endif; ?>
 
-  <form method="POST" action="/login">
+  <form method="POST" action="/attendance-v2/public/login">
     <input type="email" name="email" placeholder="メールアドレス" required><br>
     <input type="password" name="password" placeholder="パスワード" required><br>
     <button type="submit">ログイン</button>

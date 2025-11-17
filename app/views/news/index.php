@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>お知らせ</title>
-  <link rel="stylesheet" href="/css/modern-design.css">
+  <link rel="stylesheet" href="/attendance-v2/public/css/modern-design.css">
 </head>
 <body>
   <!-- Header -->
@@ -16,11 +16,11 @@
         </h1>
         <div class="page-actions">
           <?php if (in_array($_SESSION['user']['role'], ['admin', 'poster'])): ?>
-            <a href="/news/create" class="btn btn-primary">
+            <a href="/attendance-v2/public/news/create" class="btn btn-primary">
               ➕ 新規投稿
             </a>
           <?php endif; ?>
-          <a href="/menu" class="btn btn-secondary">
+          <a href="/attendance-v2/public/menu" class="btn btn-secondary">
             ← メニューに戻る
           </a>
         </div>
@@ -75,7 +75,7 @@
     function deleteNews(id) {
       if (!confirm('このお知らせを削除しますか？')) return;
 
-      fetch('/news/delete', {
+      fetch('/attendance-v2/public/news/delete', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

@@ -38,6 +38,6 @@
   <h1><?= htmlspecialchars($title) ?></h1>
   <p><?= htmlspecialchars($message) ?></p>
 
-  <a href="/hello">Helloページへ →</a>
+  <a href="/attendance-v2/public/hello">Helloページへ →</a>
 </body>
 </html>

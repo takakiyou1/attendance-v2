@@ -41,7 +41,7 @@ button { margin-top:15px; padding:10px 20px; border:none; border-radius:5px; col
   <script>
   document.getElementById('settingForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('/attendance-v2/api/save_pay_setting.php', {
+    fetch('/attendance-v2/public/attendance-v2/api/save_pay_setting.php', {
       method: 'POST',
       body: new FormData(e.target)
     })

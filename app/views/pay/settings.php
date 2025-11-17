@@ -27,12 +27,12 @@ a:hover { text-decoration: underline; }
         <td><?= htmlspecialchars($u['id']) ?></td>
         <td><?= htmlspecialchars($u['name']) ?></td>
         <td><?= $u['pay_type'] === 'fixed' ? '固定' : '時給' ?></td>
-        <td><a href="/pay/history?user_id=<?= $u['id'] ?>"><?= number_format($u['pay_rate']) ?> 円</a></td>
-        <td><a href="/pay/setting_edit?user_id=<?= $u['id'] ?>">編集</a></td>
+        <td><a href="/attendance-v2/public/pay/history?user_id=<?= $u['id'] ?>"><?= number_format($u['pay_rate']) ?> 円</a></td>
+        <td><a href="/attendance-v2/public/pay/setting_edit?user_id=<?= $u['id'] ?>">編集</a></td>
       </tr>
     <?php endforeach; ?>
   </table>
 
-  <p style="text-align:center;"><a href="/menu">← メニューに戻る</a></p>
+  <p style="text-align:center;"><a href="/attendance-v2/public/menu">← メニューに戻る</a></p>
 </body>
 </html>

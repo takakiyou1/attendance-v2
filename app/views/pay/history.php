@@ -50,7 +50,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
   </table>
 
   <p style="text-align:center;">
-    <a href="/pay/settings">← 報酬設定一覧へ戻る</a>
+    <a href="/attendance-v2/public/pay/settings">← 報酬設定一覧へ戻る</a>
   </p>
 </body>
 </html>
