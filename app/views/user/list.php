@@ -52,7 +52,7 @@
                   <?= $u['role'] === 'admin' ? '管理者' : 'スタッフ' ?>
                 </span>
               </td>
-              <td><?= $u['pay_type'] === 'fixed' ? '固定' : '時給' ?></td>
+              <td><?= $u['pay_type'] === 'fixed' ? '固定' : '時間報酬' ?></td>
               <td><?= number_format($u['pay_rate']) ?> 円</td>
               <td>
                 <a href="<?= url('user/edit') ?>?id=<?= $u['id'] ?>" class="btn btn-sm btn-secondary">編集</a>

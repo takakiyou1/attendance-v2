@@ -43,7 +43,7 @@
               <td><?= htmlspecialchars($u['name']) ?></td>
               <td>
                 <span class="badge <?= $u['pay_type'] === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
-                  <?= $u['pay_type'] === 'fixed' ? '固定' : '時給' ?>
+                  <?= $u['pay_type'] === 'fixed' ? '固定' : '時間報酬' ?>
                 </span>
               </td>
               <td>

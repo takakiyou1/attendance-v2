@@ -235,7 +235,7 @@
             <div class="menu-item-icon">🧾</div>
             <div class="menu-item-content">
               <div class="menu-item-title">報酬設定</div>
-              <p class="menu-item-desc">時給設定・報酬ルール管理</p>
+              <p class="menu-item-desc">時間報酬設定・報酬ルール管理</p>
             </div>
           </a>
 

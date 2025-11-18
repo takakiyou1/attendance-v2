@@ -37,7 +37,7 @@
         <div class="form-group">
           <label class="form-label">支払い方式</label>
           <select name="pay_type" class="form-select">
-            <option value="hourly" <?= $user['pay_type'] === 'hourly' ? 'selected' : '' ?>>時給</option>
+            <option value="hourly" <?= $user['pay_type'] === 'hourly' ? 'selected' : '' ?>>時間報酬</option>
             <option value="fixed" <?= $user['pay_type'] === 'fixed' ? 'selected' : '' ?>>固定</option>
           </select>
         </div>

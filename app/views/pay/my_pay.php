@@ -55,7 +55,7 @@
               <th>支払い方式</th>
               <td>
                 <span class="badge <?= $pay_type === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
-                  <?= ($pay_type === 'fixed') ? '固定報酬' : '時給制（'.number_format($pay_rate).'円）' ?>
+                  <?= ($pay_type === 'fixed') ? '固定報酬' : '時間報酬制（'.number_format($pay_rate).'円）' ?>
                 </span>
               </td>
             </tr>

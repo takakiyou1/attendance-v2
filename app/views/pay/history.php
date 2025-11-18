@@ -59,7 +59,7 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
             <tr>
               <td>
                 <span class="badge <?= $r['pay_type'] === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
-                  <?= $r['pay_type'] === 'fixed' ? '固定' : '時給' ?>
+                  <?= $r['pay_type'] === 'fixed' ? '固定' : '時間報酬' ?>
                 </span>
               </td>
               <td><?= number_format($r['pay_rate']) ?> 円</td>

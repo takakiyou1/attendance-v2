@@ -39,7 +39,7 @@
           <label class="form-label">報酬タイプ</label>
           <p style="margin: 0;">
             <span class="badge <?= $user['pay_type'] === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
-              <?= $user['pay_type'] === 'fixed' ? '固定' : '時給' ?>
+              <?= $user['pay_type'] === 'fixed' ? '固定' : '時間報酬' ?>
             </span>
           </p>
         </div>

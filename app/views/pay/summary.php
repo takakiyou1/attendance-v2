@@ -61,7 +61,7 @@
               <td><?= htmlspecialchars($d['name']) ?></td>
               <td>
                 <span class="badge <?= $d['pay_type'] === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
-                  <?= ($d['pay_type'] === 'fixed') ? '固定' : '時給' ?>
+                  <?= ($d['pay_type'] === 'fixed') ? '固定' : '時間報酬' ?>
                 </span>
               </td>
               <td><?= round($d['total_hours'], 1) ?> 時間</td>
