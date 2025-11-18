@@ -33,6 +33,18 @@ class ShiftController extends Controller
     }
 
     /**
+     * New calendar view (TimeTree style)
+     */
+    public function calendar_new()
+    {
+        if (!Session::isAdmin()) {
+            Response::redirect(url('login'));
+        }
+
+        $this->view('shift/calendar_new');
+    }
+
+    /**
      * Day view for admin
      */
     public function day()

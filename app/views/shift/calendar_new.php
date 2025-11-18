@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>シフト管理カレンダー | Re:time</title>
+  <title>シフトカレンダー（新） | Re:time</title>
   <link rel="stylesheet" href="<?= asset('css/modern-design.css') ?>">
   <style>
     /* タイムツリー風カレンダー */
@@ -110,7 +110,7 @@
     }
 
     .calendar-day.selected .day-number {
-      color: white !important;
+      color: white;
     }
 
     .day-number {
@@ -179,12 +179,6 @@
       background: var(--color-bg-secondary);
       border-radius: var(--radius-md);
       border-left: 4px solid var(--color-primary);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-
-    .shift-item:hover {
-      background: var(--color-bg-tertiary);
     }
 
     .shift-item .time {
@@ -230,57 +224,6 @@
       background: var(--color-primary-hover);
     }
 
-    /* モーダル */
-    #modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    #modal-content {
-      background: var(--color-bg-primary);
-      padding: var(--space-xl);
-      border-radius: var(--radius-lg);
-      width: 90%;
-      max-width: 450px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow-xl);
-    }
-
-    #modal-content h3 {
-      margin: 0 0 var(--space-lg) 0;
-      color: var(--color-text-primary);
-      font-size: var(--text-xl);
-    }
-
-    #repeatArea {
-      margin-top: var(--space-md);
-      border-top: 1px solid var(--color-border-light);
-      padding-top: var(--space-md);
-    }
-
-    #repeatArea h4 {
-      margin: 0 0 var(--space-sm) 0;
-      color: var(--color-text-primary);
-    }
-
-    .modal-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-sm);
-      margin-top: var(--space-lg);
-    }
-
-    .modal-buttons button {
-      flex: 1;
-      min-width: 120px;
-    }
-
     /* モバイル最適化 */
     @media (max-width: 480px) {
       .calendar-day {
@@ -296,25 +239,6 @@
         width: 6px;
         height: 6px;
       }
-
-      .shift-item {
-        flex-wrap: wrap;
-      }
-
-      .shift-item .time {
-        min-width: auto;
-      }
-
-      #modal-content {
-        width: 95%;
-        max-height: 90vh;
-        padding: var(--space-lg);
-      }
-
-      .modal-buttons button {
-        font-size: var(--text-sm);
-        padding: var(--space-sm) var(--space-md);
-      }
     }
   </style>
 </head>
@@ -324,7 +248,7 @@
     <div class="container">
       <div class="page-header-content">
         <h1 class="page-title">
-          📅 シフト管理カレンダー
+          📅 シフトカレンダー
         </h1>
         <div class="page-actions">
           <a href="<?= url('menu') ?>" class="btn btn-secondary">
@@ -361,7 +285,9 @@
       </div>
 
       <!-- カレンダーグリッド -->
-      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- JavaScriptで生成 -->
+      </div>
 
       <!-- 選択日の詳細 -->
       <div class="day-detail" id="dayDetail">
@@ -377,136 +303,12 @@
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="modal">
-    <div id="modal-content">
-      <h3 id="modal-title">シフト登録／編集</h3>
-      <form id="shiftForm">
-        <input type="hidden" name="id" id="shift-id">
-
-        <div class="form-group">
-          <label class="form-label">スタッフ</label>
-          <select name="user_id" id="user_id" class="form-select" required>
-            <option value="">選択してください</option>
-            <?php
-            require __DIR__ . '/../../../config/database.php';
-            $users = $pdo->query("SELECT id, name FROM users WHERE role='employee'")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($users as $u) {
-              echo "<option value='{$u['id']}'>{$u['name']}</option>";
-            }
-            ?>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">日付</label>
-          <input type="date" name="date" id="date" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">開始時間</label>
-          <input type="time" name="shift_start" id="shift_start" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">終了時間</label>
-          <input type="time" name="shift_end" id="shift_end" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">色</label>
-          <select name="color" id="color" class="form-select">
-            <option value="#000000">Black (#000000)</option>
-            <option value="#ffffff">White (#ffffff)</option>
-            <option value="#ff0000">Red (#ff0000)</option>
-            <option value="#0000ff">Blue (#0000ff)</option>
-            <option value="#008000">Green (#008000)</option>
-            <option value="#ffff00">Yellow (#ffff00)</option>
-          </select>
-        </div>
-
-        <!-- Repeat Settings -->
-        <div id="repeatArea" style="display:none;">
-          <h4>🔁 繰り返し設定</h4>
-
-          <div class="form-group">
-            <label class="form-label">繰り返しタイプ</label>
-            <select name="repeat_type" id="repeat_type" class="form-select">
-              <option value="">なし</option>
-              <option value="daily">毎日</option>
-              <option value="weekly">毎週</option>
-              <option value="monthly">毎月</option>
-            </select>
-          </div>
-
-          <div id="weekday-options" class="form-group">
-            <label class="form-label">曜日指定：</label>
-            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
-              <?php
-              $days = ['月','火','水','木','金','土','日'];
-              foreach ($days as $i => $d) {
-                echo "<label style='display: flex; align-items: center; gap: var(--space-xs);'><input type='checkbox' name='days[]' value='".($i+1)."'> {$d}</label>";
-              }
-              ?>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">繰り返し終了日</label>
-            <input type="date" name="repeat_end" id="repeat_end" class="form-input">
-          </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="modal-buttons">
-          <button type="submit" class="btn btn-primary">💾 保存</button>
-          <button type="button" id="deleteSingleBtn" class="btn btn-danger">🗑 削除</button>
-          <button type="button" id="repeatBtn" class="btn btn-success">🔁 繰り返し</button>
-          <button type="button" id="editGroupBtn" class="btn btn-warning">✏️ 全体変更</button>
-          <button type="button" id="deleteGroupBtn" class="btn btn-danger">🗑 全体削除</button>
-          <button type="button" id="closeBtn" class="btn btn-secondary">✖ 閉じる</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <script>
-    // Base URL for API calls
     const baseUrl = '<?= BASE_URL ?>';
-
-    const modal = document.getElementById('modal');
-    const form = document.getElementById('shiftForm');
-    const repeatBtn = document.getElementById('repeatBtn');
-    const closeBtn = document.getElementById('closeBtn');
 
     let currentDate = new Date();
     let selectedDate = null;
     let shiftsData = {};
-
-    // Open Modal
-    function openModal(data = {}) {
-      document.getElementById('shift-id').value = data.id || '';
-      document.getElementById('user_id').value = data.user_id || '';
-      document.getElementById('date').value = data.date || selectedDate || '';
-      document.getElementById('shift_start').value = data.shift_start || '';
-      document.getElementById('shift_end').value = data.shift_end || '';
-      document.getElementById('color').value = data.color || '#0000ff';
-
-      const modalTitle = document.getElementById('modal-title');
-      if (data.repeat_id) {
-        modalTitle.textContent = `シフト登録／編集　※繰り返し（グループID: ${data.repeat_id})`;
-      } else {
-        modalTitle.textContent = 'シフト登録／編集';
-      }
-
-      modal.style.display = 'flex';
-    }
-
-    function closeModal() {
-      modal.style.display = 'none';
-      form.reset();
-      document.getElementById('repeatArea').style.display = 'none';
-    }
 
     // 月の名前
     function formatMonth(date) {
@@ -531,8 +333,11 @@
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
 
+      // 月の最初と最後
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
+
+      // 前月の日数を取得
       const prevMonthDays = firstDay.getDay();
       const prevMonth = new Date(year, month, 0);
 
@@ -563,10 +368,12 @@
       // クリックイベント
       grid.querySelectorAll('.calendar-day').forEach(cell => {
         cell.addEventListener('click', () => {
-          selectDate(cell.dataset.date);
+          const dateStr = cell.dataset.date;
+          selectDate(dateStr);
         });
       });
 
+      // シフトデータを取得
       fetchShifts();
     }
 
@@ -592,10 +399,16 @@
 
     // シフトデータを取得
     async function fetchShifts() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const start = `${year}-${String(month).padStart(2, '0')}-01`;
+      const end = `${year}-${String(month).padStart(2, '0')}-31`;
+
       try {
-        const response = await fetch(`${baseUrl}/api/shifts/all`);
+        const response = await fetch(`${baseUrl}/api/shifts/all?start=${start}&end=${end}`);
         const shifts = await response.json();
 
+        // 日付ごとにグループ化
         shiftsData = {};
         shifts.forEach(shift => {
           const date = shift.start.split('T')[0];
@@ -612,7 +425,7 @@
             const count = shiftsData[date].length;
             if (count <= 3) {
               dotsEl.innerHTML = shiftsData[date].map(s =>
-                `<div class="shift-dot" style="background:${s.color || '#3788d8'}"></div>`
+                `<div class="shift-dot" style="background:${s.color || '#007bff'}"></div>`
               ).join('');
             } else {
               dotsEl.innerHTML = `<span class="shift-count">${count}件</span>`;
@@ -620,6 +433,7 @@
           }
         });
 
+        // 選択中の日があれば詳細を更新
         if (selectedDate) {
           showDayDetail(selectedDate);
         }
@@ -630,10 +444,12 @@
 
     // 日付を選択
     function selectDate(dateStr) {
+      // 前の選択を解除
       document.querySelectorAll('.calendar-day.selected').forEach(el => {
         el.classList.remove('selected');
       });
 
+      // 新しい選択
       selectedDate = dateStr;
       const cell = document.querySelector(`[data-date="${dateStr}"]`);
       if (cell) {
@@ -663,159 +479,17 @@
           const start = shift.start.split('T')[1]?.substring(0, 5) || '';
           const end = shift.end.split('T')[1]?.substring(0, 5) || '';
           return `
-            <div class="shift-item" onclick="editShift(${shift.id})" style="border-left-color: ${shift.color || '#3788d8'}">
+            <div class="shift-item" style="border-left-color: ${shift.color || '#007bff'}">
               <span class="time">${start} - ${end}</span>
               <span class="name">${shift.title || '未設定'}</span>
-              <span class="color-indicator" style="background: ${shift.color || '#3788d8'}"></span>
+              <span class="color-indicator" style="background: ${shift.color || '#007bff'}"></span>
             </div>
           `;
         }).join('');
       }
     }
 
-    // シフト編集
-    function editShift(id) {
-      fetch(baseUrl + '/api/shifts/by-id?id=' + id)
-        .then(res => res.json())
-        .then(data => {
-          openModal(data);
-          const shiftIdField = document.getElementById('shift-id');
-          shiftIdField.dataset.repeatId = data.repeat_id || '';
-        });
-    }
-
-    // 新規シフト追加
-    document.getElementById('addShiftBtn').addEventListener('click', () => {
-      if (!selectedDate) {
-        alert('日付を選択してください');
-        return;
-      }
-      openModal({ date: selectedDate });
-    });
-
-    // Save single shift
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      fetch(baseUrl + '/shift/save', {
-        method: 'POST',
-        body: new FormData(form)
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'error') {
-          alert(res.message);
-          return;
-        }
-        alert(res.message || '保存しました');
-        closeModal();
-        fetchShifts();
-      })
-      .catch(err => {
-        console.error(err);
-        alert('エラーが発生しました');
-      });
-    });
-
-    // Repeat settings
-    repeatBtn.addEventListener('click', () => {
-      const area = document.getElementById('repeatArea');
-      if (area.style.display === 'none') {
-        area.style.display = 'block';
-      } else {
-        fetch(baseUrl + '/shift/save_repeat', {
-          method: 'POST',
-          body: new FormData(form)
-        })
-        .then(res => res.json())
-        .then(res => {
-          alert(res.message);
-          if (res.status === 'success') {
-            closeModal();
-            fetchShifts();
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert('エラーが発生しました');
-        });
-      }
-    });
-
-    // Delete repeat group
-    document.getElementById('deleteGroupBtn').addEventListener('click', () => {
-      const shiftIdField = document.getElementById('shift-id');
-      const repeat_id = shiftIdField.dataset.repeatId;
-      if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
-      if (!confirm('この繰り返し全体を削除しますか？')) return;
-
-      fetch(baseUrl + '/api/shifts/delete-group', {
-        method: 'POST',
-        body: new URLSearchParams({ repeat_id })
-      })
-      .then(res => res.json())
-      .then(res => {
-        alert(res.message);
-        closeModal();
-        fetchShifts();
-      });
-    });
-
-    // Edit repeat group
-    document.getElementById('editGroupBtn').addEventListener('click', () => {
-      const shiftIdField = document.getElementById('shift-id');
-      const repeat_id = shiftIdField.dataset.repeatId;
-      if (!repeat_id) return alert('このシフトは繰り返し登録ではありません');
-      if (!confirm('この繰り返し全体を変更しますか？')) return;
-
-      fetch(baseUrl + '/api/shifts/update-group', {
-        method: 'POST',
-        body: new URLSearchParams({
-          repeat_id,
-          user_id: document.getElementById('user_id').value,
-          shift_start: document.getElementById('shift_start').value,
-          shift_end: document.getElementById('shift_end').value
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        alert(res.message);
-        closeModal();
-        fetchShifts();
-      })
-      .catch(err => console.error(err));
-    });
-
-    // Delete single shift
-    document.getElementById('deleteSingleBtn').addEventListener('click', () => {
-      const id = document.getElementById('shift-id').value;
-      if (!id) return alert('削除対象がありません');
-      if (!confirm('このシフトを削除しますか？')) return;
-
-      fetch(baseUrl + '/shift/delete', {
-        method: 'POST',
-        body: new URLSearchParams({ id })
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success') {
-          alert(res.message || 'シフトを削除しました');
-          closeModal();
-          fetchShifts();
-        } else {
-          alert(res.message || '削除に失敗しました');
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('エラーが発生しました');
-      });
-    });
-
-    // Close modal
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-    // ナビゲーション
+    // イベントリスナー
     document.getElementById('prevMonth').addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderCalendar();
@@ -826,8 +500,19 @@
       renderCalendar();
     });
 
+    document.getElementById('addShiftBtn').addEventListener('click', () => {
+      if (selectedDate) {
+        // TODO: シフト追加モーダルを開く
+        alert(`${selectedDate}にシフトを追加`);
+      } else {
+        alert('日付を選択してください');
+      }
+    });
+
     // 初期化
     renderCalendar();
+
+    // 今日を選択
     selectDate(formatDate(new Date()));
   </script>
 </body>

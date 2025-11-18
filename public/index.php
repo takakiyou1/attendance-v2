@@ -42,6 +42,7 @@ $router->get('/menu', 'MenuController@index');
 
 // シフト管理
 $router->get('/shift/calendar', 'ShiftController@calendar');
+$router->get('/shift/calendar_new', 'ShiftController@calendar_new');
 $router->get('/shift/day', 'ShiftController@day');
 $router->post('/shift/save', 'ShiftController@save');
 $router->post('/shift/delete', 'ShiftController@delete');
