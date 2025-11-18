@@ -21,50 +21,78 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>特別手当一覧 | Re:time</title>
-  <style>
-    body { font-family: Meiryo, sans-serif; text-align:center; margin:40px; }
-    table { border-collapse: collapse; width: 80%; margin: 20px auto; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #f2f2f2; }
-    input, textarea { width:90%; padding:5px; }
-    button { margin-top:10px; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; }
-    .save { background:#007bff; color:white; }
-    .delete { background:#dc3545; color:white; }
-  </style>
+  <link rel="stylesheet" href="<?= asset('css/modern-design.css') ?>">
 </head>
 <body>
-  <h1>特別手当一覧（<?= htmlspecialchars($user['name']) ?> / <?= htmlspecialchars($month) ?>）</h1>
+  <!-- Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="page-header-content">
+        <h1 class="page-title">
+          🎁 特別手当一覧（<?= htmlspecialchars($user['name']) ?> / <?= htmlspecialchars($month) ?>）
+        </h1>
+        <div class="page-actions">
+          <a href="<?= url('pay/summary') ?>?month=<?= $month ?>" class="btn btn-secondary">
+            ← 報酬一覧へ戻る
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <form id="addForm" style="margin-bottom:20px;">
-    <input type="hidden" name="user_id" value="<?= $user_id ?>">
-    <input type="hidden" name="month" value="<?= $month ?>">
-    <input type="text" name="title" placeholder="手当名（例：教育担当）" required>
-    <input type="number" name="amount" placeholder="金額" required>
-    <button type="submit" class="save">追加</button>
-  </form>
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Add Form -->
+    <div class="card" style="margin-bottom: var(--space-lg);">
+      <form id="addForm" style="display: flex; align-items: flex-end; gap: var(--space-md); flex-wrap: wrap;">
+        <input type="hidden" name="user_id" value="<?= $user_id ?>">
+        <input type="hidden" name="month" value="<?= $month ?>">
+        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+          <label class="form-label">手当名</label>
+          <input type="text" name="title" class="form-input" placeholder="例：教育担当" required>
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+          <label class="form-label">金額（円）</label>
+          <input type="number" name="amount" class="form-input" placeholder="金額" required>
+        </div>
+        <button type="submit" class="btn btn-primary">追加</button>
+      </form>
+    </div>
 
-  <table>
-    <tr><th>ID</th><th>手当名</th><th>金額</th><th>操作</th></tr>
-    <?php foreach ($rows as $r): ?>
-    <tr>
-      <td><?= $r['id'] ?></td>
-      <td><?= htmlspecialchars($r['title']) ?></td>
-      <td><?= number_format($r['amount']) ?> 円</td>
-      <td>
-        <button class="delete" onclick="deleteAllowance(<?= $r['id'] ?>)">削除</button>
-      </td>
-    </tr>
-    <?php endforeach; ?>
-  </table>
-
-  <p><a href="/attendance-v2/public/index.php/pay/summary?month=<?= $month ?>">← 報酬一覧へ戻る</a></p>
+    <!-- Allowance Table -->
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>手当名</th>
+            <th>金額</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($rows as $r): ?>
+          <tr>
+            <td><?= $r['id'] ?></td>
+            <td><?= htmlspecialchars($r['title']) ?></td>
+            <td><?= number_format($r['amount']) ?> 円</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="deleteAllowance(<?= $r['id'] ?>)">削除</button>
+            </td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
-  // ✅ 手当追加
+  // 手当追加
   document.getElementById('addForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('/attendance-v2/public/index.php/attendance-v2/api/save_special_allowance.php', {
+    fetch('<?= url('api/save_special_allowance') ?>', {
       method: 'POST',
       body: new FormData(e.target)
     })
@@ -75,10 +103,10 @@ $user = $nameStmt->fetch(PDO::FETCH_ASSOC);
     });
   });
 
-  // ✅ 手当削除
+  // 手当削除
   function deleteAllowance(id) {
     if (!confirm('この手当を削除しますか？')) return;
-    fetch('/attendance-v2/public/index.php/attendance-v2/api/delete_special_allowance.php', {
+    fetch('<?= url('api/delete_special_allowance') ?>', {
       method: 'POST',
       body: new URLSearchParams({ id })
     })

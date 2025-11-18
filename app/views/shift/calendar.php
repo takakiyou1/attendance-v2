@@ -2,20 +2,69 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>シフト管理カレンダー | Re:time</title>
+  <link rel="stylesheet" href="<?= asset('css/modern-design.css') ?>">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-
   <style>
-    body {
-      font-family: Meiryo, sans-serif;
-      margin: 40px;
-      background-color: #f9f9f9;
-      text-align: center;
+    .fc {
+      background: var(--color-bg-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--color-border-light);
     }
-    #calendar { max-width: 900px; margin: 0 auto; }
 
-    /* モーダル背景 */
+    .fc .fc-toolbar-title {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-semibold);
+      color: var(--color-text-primary);
+    }
+
+    .fc .fc-button {
+      background: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: var(--font-medium);
+      transition: all var(--transition-fast);
+    }
+
+    .fc .fc-button:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .fc .fc-button-active {
+      background: var(--color-primary-hover) !important;
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+      border-color: var(--color-border-light);
+    }
+
+    .fc-col-header-cell {
+      background: var(--color-bg-tertiary);
+      padding: var(--space-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-text-secondary);
+    }
+
+    .fc-daygrid-day-number {
+      color: var(--color-text-primary);
+      padding: var(--space-xs);
+      font-weight: var(--font-medium);
+    }
+
+    .fc-event {
+      border-radius: var(--radius-sm);
+      padding: 2px 4px;
+      border: none;
+      font-size: var(--text-sm);
+    }
+
+    /* Modal Styles */
     #modal {
       display: none;
       position: fixed;
@@ -26,148 +75,170 @@
       z-index: 9999;
     }
 
-    /* モーダル本体 */
     #modal-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 400px;
-      max-height: 80vh;
+      background: var(--color-bg-primary);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 450px;
+      max-height: 85vh;
       overflow-y: auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-xl);
     }
 
-    label { display: block; margin-top: 8px; }
-    input, select { width: 100%; padding: 8px; margin-top: 4px; }
-
-    button {
-      margin-top: 10px;
-      padding: 8px 14px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    #modal-content h3 {
+      margin: 0 0 var(--space-lg) 0;
+      color: var(--color-text-primary);
+      font-size: var(--text-xl);
     }
-    .save { background: #007bff; color: white; }
-    .repeat { background: #28a745; color: white; }
-    .close { background: #6c757d; color: white; }
+
+    #repeatArea {
+      margin-top: var(--space-md);
+      border-top: 1px solid var(--color-border-light);
+      padding-top: var(--space-md);
+    }
+
+    #repeatArea h4 {
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--color-text-primary);
+    }
+
+    .modal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      min-width: 120px;
+    }
 
     @media (max-width: 768px) {
       #modal-content {
-        width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
-        font-size: 14px;
-      }
-      #calendar {
         width: 95%;
-        margin: 0 auto;
+        max-height: 90vh;
+        padding: var(--space-lg);
       }
-      button {
-        font-size: 14px;
-        padding: 6px 10px;
+      .modal-buttons button {
+        font-size: var(--text-sm);
+        padding: var(--space-sm) var(--space-md);
       }
-      h1 { font-size: 20px; }
-    }
-
-    /* ✅ メニューに戻るボタン */
-    .back-btn {
-      display: inline-block;
-      margin-top: 30px;
-      background: #007bff;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-    .back-btn:hover {
-      background: #0056b3;
     }
   </style>
 </head>
 
 <body>
-  <h1>📅 シフト管理カレンダー</h1>
-  <div id="calendar"></div>
+  <!-- Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="page-header-content">
+        <h1 class="page-title">
+          📅 シフト管理カレンダー
+        </h1>
+        <div class="page-actions">
+          <a href="<?= url('menu') ?>" class="btn btn-secondary">
+            ← メニューに戻る
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- ✅ メニューに戻るリンク（シンプル） -->
-<p style="margin-top: 30px;">
-  <a href="<?= url('menu') ?>">← メニューに戻る</a>
-</p>
+  <!-- Main Content -->
+  <div class="container">
+    <div id="calendar"></div>
+  </div>
 
-
-  <!-- モーダル -->
+  <!-- Modal -->
   <div id="modal">
     <div id="modal-content">
       <h3 id="modal-title">シフト登録／編集</h3>
       <form id="shiftForm">
         <input type="hidden" name="id" id="shift-id">
 
-        <label>スタッフ</label>
-        <select name="user_id" id="user_id" required>
-          <option value="">選択してください</option>
-          <?php
-          require __DIR__ . '/../../../config/database.php';
-          $users = $pdo->query("SELECT id, name FROM users WHERE role='employee'")->fetchAll(PDO::FETCH_ASSOC);
-          foreach ($users as $u) {
-            echo "<option value='{$u['id']}'>{$u['name']}</option>";
-          }
-          ?>
-        </select>
-
-        <label>日付</label>
-        <input type="date" name="date" id="date" required>
-
-        <label>開始時間</label>
-        <input type="time" name="shift_start" id="shift_start" required>
-
-        <label>終了時間</label>
-        <input type="time" name="shift_end" id="shift_end" required>
-
-        <label>色</label>
-        <select name="color" id="color">
-          <option value="#000000">Black (#000000)</option>
-          <option value="#ffffff">White (#ffffff)</option>
-          <option value="#ff0000">Red (#ff0000)</option>
-          <option value="#0000ff">Blue (#0000ff)</option>
-          <option value="#008000">Green (#008000)</option>
-          <option value="#ffff00">Yellow (#ffff00)</option>
-        </select>
-
-        <!-- 🔁 繰り返し設定エリア -->
-        <div id="repeatArea" style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px; display:none;">
-          <h4>🔁 繰り返し設定</h4>
-
-          <label>繰り返しタイプ</label>
-          <select name="repeat_type" id="repeat_type">
-            <option value="">なし</option>
-            <option value="daily">毎日</option>
-            <option value="weekly">毎週</option>
-            <option value="monthly">毎月</option>
-          </select>
-
-          <div id="weekday-options" style="margin-top:5px;">
-            <label>曜日指定：</label><br>
+        <div class="form-group">
+          <label class="form-label">スタッフ</label>
+          <select name="user_id" id="user_id" class="form-select" required>
+            <option value="">選択してください</option>
             <?php
-            $days = ['月','火','水','木','金','土','日'];
-            foreach ($days as $i => $d) {
-              echo "<label><input type='checkbox' name='days[]' value='".($i+1)."'> {$d}</label> ";
+            require __DIR__ . '/../../../config/database.php';
+            $users = $pdo->query("SELECT id, name FROM users WHERE role='employee'")->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($users as $u) {
+              echo "<option value='{$u['id']}'>{$u['name']}</option>";
             }
             ?>
-          </div>
-
-          <label>繰り返し終了日</label>
-          <input type="date" name="repeat_end" id="repeat_end">
+          </select>
         </div>
 
-        <!-- ボタン群 -->
-        <div style="text-align:center;">
-          <button type="submit" class="save">💾 保存</button>
-          <button type="button" id="deleteSingleBtn" style="background:#ff6666;color:#fff;">🗑 このシフトを削除</button>
-          <button type="button" id="repeatBtn" class="repeat">🔁 繰り返し設定</button>
-          <button type="button" id="editGroupBtn" style="background:#ffc107;color:#000;">✏️ 繰り返し全体を変更</button>
-          <button type="button" id="deleteGroupBtn" style="background:#dc3545;color:#fff;">🗑 繰り返し全体を削除</button>
-          <button type="button" id="closeBtn" class="close">✖ 閉じる</button>
+        <div class="form-group">
+          <label class="form-label">日付</label>
+          <input type="date" name="date" id="date" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">開始時間</label>
+          <input type="time" name="shift_start" id="shift_start" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">終了時間</label>
+          <input type="time" name="shift_end" id="shift_end" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">色</label>
+          <select name="color" id="color" class="form-select">
+            <option value="#000000">Black (#000000)</option>
+            <option value="#ffffff">White (#ffffff)</option>
+            <option value="#ff0000">Red (#ff0000)</option>
+            <option value="#0000ff">Blue (#0000ff)</option>
+            <option value="#008000">Green (#008000)</option>
+            <option value="#ffff00">Yellow (#ffff00)</option>
+          </select>
+        </div>
+
+        <!-- Repeat Settings -->
+        <div id="repeatArea" style="display:none;">
+          <h4>🔁 繰り返し設定</h4>
+
+          <div class="form-group">
+            <label class="form-label">繰り返しタイプ</label>
+            <select name="repeat_type" id="repeat_type" class="form-select">
+              <option value="">なし</option>
+              <option value="daily">毎日</option>
+              <option value="weekly">毎週</option>
+              <option value="monthly">毎月</option>
+            </select>
+          </div>
+
+          <div id="weekday-options" class="form-group">
+            <label class="form-label">曜日指定：</label>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <?php
+              $days = ['月','火','水','木','金','土','日'];
+              foreach ($days as $i => $d) {
+                echo "<label style='display: flex; align-items: center; gap: var(--space-xs);'><input type='checkbox' name='days[]' value='".($i+1)."'> {$d}</label>";
+              }
+              ?>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">繰り返し終了日</label>
+            <input type="date" name="repeat_end" id="repeat_end" class="form-input">
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="modal-buttons">
+          <button type="submit" class="btn btn-primary">💾 保存</button>
+          <button type="button" id="deleteSingleBtn" class="btn btn-danger">🗑 削除</button>
+          <button type="button" id="repeatBtn" class="btn btn-success">🔁 繰り返し</button>
+          <button type="button" id="editGroupBtn" class="btn btn-warning">✏️ 全体変更</button>
+          <button type="button" id="deleteGroupBtn" class="btn btn-danger">🗑 全体削除</button>
+          <button type="button" id="closeBtn" class="btn btn-secondary">✖ 閉じる</button>
         </div>
       </form>
     </div>
@@ -182,7 +253,7 @@
     const repeatBtn = document.getElementById('repeatBtn');
     const closeBtn = document.getElementById('closeBtn');
 
-    // ✅ モーダルを開く関数
+    // Open Modal
     function openModal(data = {}) {
       document.getElementById('shift-id').value = data.id || '';
       document.getElementById('user_id').value = data.user_id || '';
@@ -191,7 +262,6 @@
       document.getElementById('shift_end').value = data.shift_end || '';
       document.getElementById('color').value = data.color || '#0000ff';
 
-      // ✅ 繰り返しシフトならタイトルに表示
       const modalTitle = document.getElementById('modal-title');
       if (data.repeat_id) {
         modalTitle.textContent = `シフト登録／編集　※繰り返し（グループID: ${data.repeat_id})`;
@@ -218,9 +288,9 @@
           center: 'title',
           right: 'dayGridMonth,timeGridWeek'
         },
-        slotMinTime: "09:00:00",   // ✅ 開始時間（営業開始）
-        slotMaxTime: "29:00:00",   // ✅ 終了時間（翌5時 = 29時）
-        nextDayThreshold: "09:00:00", // ✅ 深夜シフトを翌日扱いしない（9時前は当日扱い）
+        slotMinTime: "09:00:00",
+        slotMaxTime: "29:00:00",
+        nextDayThreshold: "09:00:00",
         events: baseUrl + '/api/shifts/all',
 
         dateClick: function(info) {
@@ -244,7 +314,7 @@
       });
       calendar.render();
 
-      // 単発保存
+      // Save single shift
       form.addEventListener('submit', e => {
         e.preventDefault();
         fetch(baseUrl + '/shift/save', {
@@ -267,7 +337,7 @@
         });
       });
 
-      // 繰り返し設定
+      // Repeat settings
       repeatBtn.addEventListener('click', () => {
         const area = document.getElementById('repeatArea');
         if (area.style.display === 'none') {
@@ -292,7 +362,7 @@
         }
       });
 
-      // 繰り返し削除
+      // Delete repeat group
       document.getElementById('deleteGroupBtn').addEventListener('click', () => {
         const shiftIdField = document.getElementById('shift-id');
         const repeat_id = shiftIdField.dataset.repeatId;
@@ -311,7 +381,7 @@
         });
       });
 
-      // ✅ 繰り返し全体を変更
+      // Edit repeat group
       document.getElementById('editGroupBtn').addEventListener('click', () => {
         const shiftIdField = document.getElementById('shift-id');
         const repeat_id = shiftIdField.dataset.repeatId;
@@ -336,7 +406,7 @@
         .catch(err => console.error(err));
       });
 
-      // ✅ 単発シフト削除
+      // Delete single shift
       document.getElementById('deleteSingleBtn').addEventListener('click', () => {
         const id = document.getElementById('shift-id').value;
         if (!id) return alert('削除対象がありません');
@@ -362,7 +432,7 @@
         });
       });
 
-      // 閉じる
+      // Close modal
       closeBtn.addEventListener('click', closeModal);
       modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
     });

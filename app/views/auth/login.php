@@ -2,69 +2,74 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ログイン | Re:time</title>
+  <link rel="stylesheet" href="<?= asset('css/modern-design.css') ?>">
   <style>
-    body {
-      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      background-color: #f9f9f9;
-      text-align: center;
-      margin-top: 100px;
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-lg);
     }
-    .logo {
-      font-size: 48px;
-      font-weight: bold;
-      color: #0066cc;
-      margin-bottom: 10px;
+    .login-logo {
+      font-size: var(--text-4xl);
+      font-weight: var(--font-bold);
+      color: var(--color-primary);
+      margin-bottom: var(--space-sm);
       letter-spacing: 2px;
     }
-    .tagline {
-      color: #666;
-      margin-bottom: 40px;
-      font-size: 14px;
+    .login-tagline {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-2xl);
+      font-size: var(--text-sm);
     }
-    form {
-      display: inline-block;
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .login-card {
+      background: var(--color-bg-primary);
+      padding: var(--space-2xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      max-width: 400px;
     }
-    input {
-      margin: 10px 0;
-      padding: 8px;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    .login-card .form-group {
+      margin-bottom: var(--space-md);
     }
-    button {
-      padding: 10px 20px;
-      background-color: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    .login-card .form-input {
+      width: 100%;
     }
-    button:hover {
-      background-color: #004d99;
-    }
-    .error {
-      color: red;
-      margin-bottom: 15px;
+    .login-card .btn {
+      width: 100%;
+      margin-top: var(--space-md);
     }
   </style>
 </head>
 <body>
-  <div class="logo">Re:time</div>
-  <p class="tagline">シフト・勤怠管理システム</p>
+  <div class="login-container">
+    <div class="login-logo">Re:time</div>
+    <p class="login-tagline">シフト・勤怠管理システム</p>
 
-  <?php if (!empty($error)): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
-  <?php endif; ?>
+    <?php if (!empty($error)): ?>
+      <div class="alert alert-error" style="max-width: 400px; width: 100%; margin-bottom: var(--space-md);">
+        <?= htmlspecialchars($error) ?>
+      </div>
+    <?php endif; ?>
 
-  <form method="POST" action="<?= url('login') ?>">
-    <input type="email" name="email" placeholder="メールアドレス" required><br>
-    <input type="password" name="password" placeholder="パスワード" required><br>
-    <button type="submit">ログイン</button>
-  </form>
+    <div class="login-card">
+      <form method="POST" action="<?= url('login') ?>">
+        <div class="form-group">
+          <label class="form-label" for="email">メールアドレス</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">パスワード</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="パスワード" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">ログイン</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

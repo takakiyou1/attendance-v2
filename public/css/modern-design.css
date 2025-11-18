@@ -606,26 +606,61 @@ a:hover {
    ============================================ */
 @media (max-width: 768px) {
   :root {
-    --text-3xl: 1.5rem;
-    --text-2xl: 1.25rem;
+    --text-base: 0.875rem;   /* 14px */
+    --text-lg: 1rem;         /* 16px */
+    --text-xl: 1.125rem;     /* 18px */
+    --text-2xl: 1.25rem;     /* 20px */
+    --text-3xl: 1.5rem;      /* 24px */
+    --text-4xl: 1.75rem;     /* 28px */
+  }
+
+  body {
+    font-size: var(--text-base);
   }
 
   .container,
   .container-narrow {
     padding: var(--space-md);
+    max-width: 100%;
   }
 
   .card {
     padding: var(--space-md);
+    margin: 0 var(--space-sm);
   }
 
   .menu-grid {
     grid-template-columns: 1fr;
+    padding: 0 var(--space-sm);
+  }
+
+  .menu-item {
+    padding: var(--space-md);
+  }
+
+  .menu-item-icon {
+    font-size: var(--text-2xl);
+  }
+
+  .menu-item-title {
+    font-size: var(--text-base);
+  }
+
+  .menu-item-desc {
+    font-size: var(--text-xs);
+  }
+
+  .page-header {
+    padding: var(--space-md) 0;
   }
 
   .page-header-content {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: var(--text-xl);
   }
 
   .page-actions {
@@ -634,15 +669,33 @@ a:hover {
 
   .btn {
     width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-sm);
   }
 
   .table {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
   }
 
   .table th,
   .table td {
-    padding: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .welcome h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .welcome p {
+    font-size: var(--text-base);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
   }
 }
 

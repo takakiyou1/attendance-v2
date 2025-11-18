@@ -120,12 +120,56 @@
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
-        gap: var(--space-md);
+        gap: var(--space-sm);
+        padding: 0 var(--space-md);
+      }
+
+      .logo {
+        font-size: var(--text-xl);
       }
 
       .user-info {
         width: 100%;
         justify-content: space-between;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: var(--text-base);
+      }
+
+      .user-name {
+        font-size: var(--text-sm);
+      }
+
+      .main-content {
+        padding: var(--space-lg) var(--space-md);
+      }
+
+      .welcome {
+        margin-bottom: var(--space-xl);
+      }
+
+      .welcome h1 {
+        font-size: var(--text-xl);
+      }
+
+      .welcome p {
+        font-size: var(--text-sm);
+      }
+
+      .menu-section-title {
+        font-size: var(--text-base);
+      }
+
+      .logout-btn {
+        margin-top: var(--space-lg);
+      }
+
+      .logout-btn .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--text-sm);
       }
     }
   </style>

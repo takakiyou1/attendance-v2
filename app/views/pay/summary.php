@@ -2,64 +2,81 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>報酬一覧 | Re:time</title>
-  <style>
-    table { border-collapse: collapse; width: 80%; margin: 20px auto; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #f2f2f2; }
-    h1, h2 { text-align: center; }
-    .month-nav { text-align: center; margin-bottom: 20px; }
-    .month-nav a, .month-nav button {
-      background: #007bff; color: #fff; padding: 6px 12px;
-      margin: 0 5px; border-radius: 5px; text-decoration: none; border: none; cursor: pointer;
-    }
-    .month-nav a:hover, .month-nav button:hover { background: #0056b3; }
-  </style>
+  <link rel="stylesheet" href="<?= asset('css/modern-design.css') ?>">
 </head>
 <body>
-  <h1>💰 報酬一覧（<?= htmlspecialchars($month) ?>）</h1>
-
-  <div class="month-nav">
-    <?php
-      $prevMonth = date('Y-m', strtotime($month . ' -1 month'));
-      $nextMonth = date('Y-m', strtotime($month . ' +1 month'));
-    ?>
-    <a href="?month=<?= $prevMonth ?>">← 前月</a>
-    <a href="?month=<?= $nextMonth ?>">次月 →</a>
-
-    <form method="GET" action="" style="display:inline;">
-      <input type="month" name="month" value="<?= $month ?>">
-      <button type="submit">表示</button>
-    </form>
+  <!-- Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="page-header-content">
+        <h1 class="page-title">
+          💰 報酬一覧（<?= htmlspecialchars($month) ?>）
+        </h1>
+        <div class="page-actions">
+          <a href="<?= url('menu') ?>" class="btn btn-secondary">
+            ← メニューに戻る
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
- <table>
-  <tr>
-    <th>スタッフ名</th>
-    <th>支払い方式</th>
-    <th>勤務時間</th>
-    <th>報酬額</th>
-    <th>特別手当</th> <!-- 追加 -->
-    <th>合計支給額</th> <!-- 追加 -->
-    <th>操作</th>
-  </tr>
-  <?php foreach ($data as $d): ?>
-    <tr>
-      <td><?= htmlspecialchars($d['name']) ?></td>
-      <td><?= ($d['pay_type'] === 'fixed') ? '固定報酬' : '時給計算' ?></td>
-      <td><?= round($d['total_hours'], 1) ?> 時間</td>
-      <td><?= number_format($d['calculated_pay']) ?> 円</td>
-      <td><?= number_format($d['special_allowance'] ?? 0) ?> 円</td> <!-- 追加 -->
-      <td><strong><?= number_format($d['total_pay'] ?? $d['calculated_pay']) ?> 円</strong></td> <!-- 追加 -->
-      <td>
-        <a href="/attendance-v2/public/index.php/pay/edit?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">編集</a> |
-        <a href="/attendance-v2/public/index.php/pay/allowance_list?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>">手当一覧</a>
-      </td>
-    </tr>
-  <?php endforeach; ?>
-</table>
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Month Navigation -->
+    <div class="card" style="margin-bottom: var(--space-lg);">
+      <div style="display: flex; align-items: center; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+        <?php
+          $prevMonth = date('Y-m', strtotime($month . ' -1 month'));
+          $nextMonth = date('Y-m', strtotime($month . ' +1 month'));
+        ?>
+        <a href="?month=<?= $prevMonth ?>" class="btn btn-secondary">← 前月</a>
+        <form method="GET" action="" style="display: flex; align-items: center; gap: var(--space-sm);">
+          <input type="month" name="month" class="form-input" value="<?= $month ?>" style="width: auto;">
+          <button type="submit" class="btn btn-primary">表示</button>
+        </form>
+        <a href="?month=<?= $nextMonth ?>" class="btn btn-secondary">次月 →</a>
+      </div>
+    </div>
 
-
-  <h2><a href="/attendance-v2/public/index.php/menu">← メニューに戻る</a></h2>
+    <!-- Data Table -->
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>スタッフ名</th>
+            <th>支払い方式</th>
+            <th>勤務時間</th>
+            <th>報酬額</th>
+            <th>特別手当</th>
+            <th>合計支給額</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($data as $d): ?>
+            <tr>
+              <td><?= htmlspecialchars($d['name']) ?></td>
+              <td>
+                <span class="badge <?= $d['pay_type'] === 'fixed' ? 'badge-primary' : 'badge-success' ?>">
+                  <?= ($d['pay_type'] === 'fixed') ? '固定' : '時給' ?>
+                </span>
+              </td>
+              <td><?= round($d['total_hours'], 1) ?> 時間</td>
+              <td><?= number_format($d['calculated_pay']) ?> 円</td>
+              <td><?= number_format($d['special_allowance'] ?? 0) ?> 円</td>
+              <td><strong><?= number_format($d['total_pay'] ?? $d['calculated_pay']) ?> 円</strong></td>
+              <td>
+                <a href="<?= url('pay/edit') ?>?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>" class="btn btn-sm btn-secondary">編集</a>
+                <a href="<?= url('pay/allowance_list') ?>?user_id=<?= $d['user_id'] ?>&month=<?= $month ?>" class="btn btn-sm btn-primary">手当</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>
