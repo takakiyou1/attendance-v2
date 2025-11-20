@@ -59,9 +59,12 @@
 
   <script>
   const baseUrl = '<?= BASE_URL ?>';
+  console.log('BASE_URL:', baseUrl);
   document.getElementById('settingForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch(baseUrl + '/pay/save_pay_setting', {
+    const url = baseUrl + '/pay/save_pay_setting';
+    console.log('Fetching URL:', url);
+    fetch(url, {
       method: 'POST',
       body: new FormData(e.target)
     })
