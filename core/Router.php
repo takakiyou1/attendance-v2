@@ -29,8 +29,13 @@ class Router {
 
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // デバッグ出力（削除してもOK）
-        // echo "URI: {$uri}<br>";
+        // 🔍 デバッグ出力
+        error_log("=== Router Debug ===");
+        error_log("Original REQUEST_URI: " . ($_SERVER['REQUEST_URI'] ?? 'NULL'));
+        error_log("Parsed URI: {$uri}");
+        error_log("Method: {$method}");
+        error_log("Available routes for {$method}: " . json_encode($this->routes[$method] ?? []));
+        error_log("Route exists? " . (isset($this->routes[$method][$uri]) ? 'YES' : 'NO'));
 
         if (isset($this->routes[$method][$uri])) {
             [$controller, $methodName] = explode('@', $this->routes[$method][$uri]);
