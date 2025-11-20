@@ -20,7 +20,7 @@ define('ENVIRONMENT', IS_PRODUCTION ? 'production' : 'local');
 
 // Base URL for routing (index.php path)
 if (IS_PRODUCTION) {
-    define('BASE_URL', '/index.php');  // Production: https://retimeshift.com/index.php/login
+    define('BASE_URL', '');  // Production: https://retimeshift.com/login (.htaccess hides index.php)
 } else {
     define('BASE_URL', '/attendance-v2/public/index.php');  // Local: http://localhost:8888/attendance-v2/public/index.php/login
 }
