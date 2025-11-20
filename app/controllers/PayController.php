@@ -181,6 +181,49 @@ class PayController extends Controller
         $this->view('pay/setting_edit', ['user' => $user]);
     }
 
+    // 💾 報酬設定保存（履歴に記録）
+    public function save_pay_setting()
+    {
+        if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            Response::json(['status' => 'error', 'message' => '権限がありません'], 403);
+            return;
+        }
+
+        $user_id = $_POST['user_id'] ?? null;
+        $pay_type = $_POST['pay_type'] ?? null;
+        $pay_rate = $_POST['pay_rate'] ?? null;
+        $start_date = $_POST['start_date'] ?? null;
+
+        if (!$user_id || !$pay_type || !$pay_rate || !$start_date) {
+            Response::json(['status' => 'error', 'message' => '必須項目が入力されていません']);
+            return;
+        }
+
+        try {
+            require __DIR__ . '/../../config/database.php';
+
+            // 既存の履歴で終了日が未設定のものに終了日を設定（新規開始日の前日）
+            $prev_day = date('Y-m-d', strtotime($start_date . ' -1 day'));
+            $stmt = $pdo->prepare("
+                UPDATE pay_rate_history
+                SET end_date = ?
+                WHERE user_id = ? AND end_date IS NULL
+            ");
+            $stmt->execute([$prev_day, $user_id]);
+
+            // 新しい履歴を追加
+            $stmt = $pdo->prepare("
+                INSERT INTO pay_rate_history (user_id, pay_type, pay_rate, start_date, end_date)
+                VALUES (?, ?, ?, ?, NULL)
+            ");
+            $stmt->execute([$user_id, $pay_type, $pay_rate, $start_date]);
+
+            Response::json(['status' => 'success', 'message' => '報酬設定を保存しました']);
+        } catch (Exception $e) {
+            Response::json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
     // 📜 報酬履歴ページ
     public function history()
     {

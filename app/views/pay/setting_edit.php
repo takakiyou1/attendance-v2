@@ -60,14 +60,20 @@
   <script>
   document.getElementById('settingForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('<?= url('api/save_pay_setting') ?>', {
+    fetch('<?= url('pay/save_pay_setting') ?>', {
       method: 'POST',
       body: new FormData(e.target)
     })
     .then(res => res.json())
     .then(res => {
       alert(res.message);
-      location.href = '<?= url('pay/settings') ?>';
+      if (res.status === 'success') {
+        location.href = '<?= url('pay/settings') ?>';
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('エラーが発生しました');
     });
   });
   </script>

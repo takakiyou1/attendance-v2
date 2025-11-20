@@ -59,6 +59,7 @@ $router->get('/pay/edit', 'PayController@edit');
 // 報酬設定
 $router->get('/pay/settings', 'PayController@settings');
 $router->get('/pay/setting_edit', 'PayController@setting_edit');
+$router->post('/pay/save_pay_setting', 'PayController@save_pay_setting');
 $router->get('/pay/history', 'PayController@history');
 $router->get('/pay/allowance_list', 'PayController@allowance_list');
 
