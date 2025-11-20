@@ -64,7 +64,19 @@
       method: 'POST',
       body: new FormData(e.target)
     })
-    .then(res => res.json())
+    .then(res => {
+      console.log('Response status:', res.status);
+      console.log('Response headers:', res.headers.get('content-type'));
+      return res.text().then(text => {
+        console.log('Response text:', text);
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.error('JSON parse error:', e);
+          throw new Error('サーバーレスポンスが不正です: ' + text.substring(0, 100));
+        }
+      });
+    })
     .then(res => {
       alert(res.message);
       if (res.status === 'success') {
@@ -72,8 +84,8 @@
       }
     })
     .catch(err => {
-      console.error(err);
-      alert('エラーが発生しました');
+      console.error('Error details:', err);
+      alert('エラーが発生しました: ' + err.message);
     });
   });
   </script>
