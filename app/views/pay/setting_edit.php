@@ -60,9 +60,13 @@
   <script>
   const baseUrl = '<?= BASE_URL ?>';
   console.log('BASE_URL:', baseUrl);
+  console.log('IS_PRODUCTION:', <?= IS_PRODUCTION ? 'true' : 'false' ?>);
   document.getElementById('settingForm').addEventListener('submit', e => {
     e.preventDefault();
-    const url = baseUrl + '/pay/save_pay_setting';
+    // 本番環境では index.php を明示的に含める
+    const url = <?= IS_PRODUCTION ? 'true' : 'false' ?>
+      ? '/index.php/pay/save_pay_setting'
+      : baseUrl + '/pay/save_pay_setting';
     console.log('Fetching URL:', url);
     fetch(url, {
       method: 'POST',
