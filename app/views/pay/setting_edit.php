@@ -58,9 +58,10 @@
   </div>
 
   <script>
+  const baseUrl = '<?= BASE_URL ?>';
   document.getElementById('settingForm').addEventListener('submit', e => {
     e.preventDefault();
-    fetch('<?= url('pay/save_pay_setting') ?>', {
+    fetch(baseUrl + '/pay/save_pay_setting', {
       method: 'POST',
       body: new FormData(e.target)
     })
@@ -80,7 +81,7 @@
     .then(res => {
       alert(res.message);
       if (res.status === 'success') {
-        location.href = '<?= url('pay/settings') ?>';
+        location.href = baseUrl + '/pay/settings';
       }
     })
     .catch(err => {
